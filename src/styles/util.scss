@@ -1,0 +1,25 @@
+@mixin large-mobile-view(){
+    @media only screen and (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin mobile-hide {
+    @media only screen and (max-width: 768px) {
+        display: none;
+    }
+}
+
+.mobile-hide {
+    @include mobile-hide();
+}
+
+@mixin mobile-show {
+    @media only screen and (min-width: 768px) {
+        display: none;
+    }
+}
+
+.mobile-show {
+    @include mobile-show();
+}

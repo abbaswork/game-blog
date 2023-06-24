@@ -1,0 +1,31 @@
+@import "./../../styles/layout.scss";
+@import "./../../styles/util.scss";
+
+.header-container {
+  /* standard padding for header */
+  padding: 15px 20px;
+  background-color: #240B36;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  &.nav-layout {
+    @include flex-spread;
+    // @include large-mobile-view {
+
+    // }
+  }
+}
+
+// link layout that changes based on mobile vs desktop view
+.nav-link-layout {
+  //default padding/setup
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1rem;
+  align-items: center;
+  color: white;
+
+  //switch order on mobile
+  @include large-mobile-view {
+    flex-direction: row;
+  }
+}
