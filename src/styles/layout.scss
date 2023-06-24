@@ -1,0 +1,8 @@
+@mixin flex-spread {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+//@mixin flex-
