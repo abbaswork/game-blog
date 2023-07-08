@@ -1,0 +1,18 @@
+@import "./../../../styles/util.scss";
+
+.page-content {
+  //padding
+  max-width: 739px;
+  width: 66%;
+  padding: 2.5rem;
+  min-height: 100vh;
+
+  @include large-mobile-view() {
+    width: 100%;
+    padding: 1.5rem;
+    max-width: 768px;
+  }
+
+  //theme properties
+  background-color: #230A35;
+}
