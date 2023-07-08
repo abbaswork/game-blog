@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 :root {
   /* Set to use Inter by default */
   font-family: 'Inter', sans-serif;
