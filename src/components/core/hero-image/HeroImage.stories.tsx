@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
+import { PageContent } from './../../layouts/page-content/PageContent';
 import { HeroImage } from './HeroImage';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta: Meta<typeof HeroImage> = {
   title: 'Core/HeroImage',
-  component: HeroImage,
-  tags: ['autodocs']
+  component: HeroImage
 };
 
 export default meta;
@@ -16,13 +15,11 @@ type Story = StoryObj<typeof HeroImage>;
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <div style={{
-        width: "66%",
-        maxWidth: "739px",
-        padding: "2.5rem"
-      }}>
-        <Story />
+      <div className='flex-center'>
+        <PageContent>
+          <Story />
+        </PageContent>
       </div>
     )
-  ]
+  ],
 };
