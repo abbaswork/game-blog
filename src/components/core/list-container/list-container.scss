@@ -1,4 +1,4 @@
-.table-of-contents {
+.list-container {
   padding: 1rem;
   background-color: #351150;
   color: white;
@@ -10,9 +10,9 @@
   a {
     line-height: 1.75rem;
   }
-}
 
-.table-of-contents-list {
-  padding-top: 1rem;
-  list-style: none;
+  .default-list {
+    padding-top: 1rem;
+    list-style: none;
+  }
 }
