@@ -5,6 +5,8 @@ import { PageContent } from '../page-content/PageContent';
 import { SidePanel } from '../side-panel/SidePanel';
 import { ListContainer } from './../../core/list-container/ListContainer';
 import { HeroImage } from './../../core/hero-image/HeroImage';
+import { Heading } from './../../typography/heading/Heading';
+import { SubHeading } from './../../typography/sub-heading/SubHeading';
 
 export const Page: React.FC = () => {
 
@@ -15,8 +17,11 @@ export const Page: React.FC = () => {
         {/* Render Basic Blog Content*/}
         <PageContent>
           <HeroImage />
-          <h1>Page Title</h1>
+          <Heading> Title </Heading>
+
+          <SubHeading>Introduction </SubHeading>
           <p>Blog Introduction</p>
+
           <ListContainer title='Table of Contents'>
             <>
               <li><a>Section 1</a></li>
@@ -24,7 +29,8 @@ export const Page: React.FC = () => {
               <li><a>Section 1</a></li>
             </>
           </ListContainer>
-          <h2>Subheading</h2>
+
+          <SubHeading>Heading 1 </SubHeading>
           <p>Blog Content</p>
         </PageContent>
 
