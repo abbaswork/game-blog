@@ -3,8 +3,6 @@ import './globals.scss'
 import { Inter } from 'next/font/google'
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel'
 import { ListContainer } from '@/components/core/list-container/ListContainer'
-import { Post } from '@/types'
-import BlogPageService from '@/services/blog/blogPage'
 
 const inter = Inter({ subsets: ['latin'] })
 

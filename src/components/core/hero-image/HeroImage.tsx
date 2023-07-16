@@ -1,11 +1,16 @@
 import Image from 'next/image';
 
-export const HeroImage = () => {
+interface Props {
+  src: string;
+  alt: string;
+}
+
+export const HeroImage = ({src, alt = ""}: Props) => {
   return (
     <Image
       // properties set to adjust to container for dynamic image
-      src={"https://cdn2.whatoplay.com/news/an-everyday-story-demo.webp"}
-      alt="example image"
+      src={src}
+      alt={alt}
       width={0}
       height={0}
       sizes="100vw"
