@@ -1,3 +1,5 @@
+@import './util.scss';
+
 @mixin flex-spread {
     display: flex;
     flex-direction: row;
@@ -5,3 +7,33 @@
     align-items: center;
 }
 
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-layout {
+    display: flex;
+    //align-items: center;
+    justify-content: center;
+    background-color: #230A35;
+    color: white;
+}
+
+.page-content {
+    //padding
+    max-width: 739px;
+    width: 66%;
+    padding: 2rem 2.5rem;
+    min-height: 100vh;
+
+    @include large-mobile-view() {
+        width: 100%;
+        padding: 1.5rem;
+        max-width: 768px;
+    }
+
+    //theme properties
+    background-color: #230A35;
+}

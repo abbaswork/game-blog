@@ -1,5 +1,4 @@
 import React from 'react';
-import './heading.scss';
 
 interface Props {
   children: any
@@ -7,6 +6,6 @@ interface Props {
 
 export const Heading = ({ children }: Props) => {
   return (
-    <h1 className='heading'>{children}</h1>
+    <h1 className='wp-title'>{children}</h1>
   );
 };
