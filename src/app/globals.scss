@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+//import global scss styles
+@import './../styles/typography.scss';
+@import './../styles/layout.scss';
+
 
 :root {
   /* Set to use Inter by default */
