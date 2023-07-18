@@ -1,15 +1,10 @@
-import { Post } from ".";
+import { Page } from ".";
 
-export const testPost: Post =
+export const testPost: Page =
 {
     "id": 23,
     "date": "2023-07-13T08:51:34",
-    "date_gmt": "2023-07-13T08:51:34",
-    "guid": {
-        "rendered": "http://gameblog.local/?p=23"
-    },
     "modified": "2023-07-13T10:45:16",
-    "modified_gmt": "2023-07-13T10:45:16",
     "slug": "hello-world-2",
     "status": "publish",
     "type": "post",
@@ -26,12 +21,6 @@ export const testPost: Post =
         "protected": false
     },
     "author": 1,
-    "featured_media": 0,
-    "comment_status": "open",
-    "ping_status": "open",
-    "sticky": false,
-    "template": "",
-    "format": "standard",
     "meta": [],
     "categories": [
         1
@@ -110,15 +99,10 @@ export const renderedHeadings = [
     <h2 className="wp-block-heading">Test 3</h2>,
 ]
 
-export const emptyPost: Post = {
+export const emptyPost: Page = {
     "id": 1,
     "date": "",
-    "date_gmt": "",
-    "guid": {
-        "rendered": ""
-    },
     "modified": "",
-    "modified_gmt": "",
     "slug": "",
     "status": "",
     "type": "",
@@ -135,12 +119,6 @@ export const emptyPost: Post = {
         "protected": false
     },
     "author": 1,
-    "featured_media": 0,
-    "comment_status": "open",
-    "ping_status": "open",
-    "sticky": false,
-    "template": "",
-    "format": "standard",
     "meta": [],
     "categories": [
         1
