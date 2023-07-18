@@ -1,5 +1,5 @@
-import BlogPageService from "@/services/blog/blogPage";
-import { Post } from "@/types";
+import BlogPageService from "@/services/page/blog/blogPage";
+import { Page } from "@/types";
 
 
 /**
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
   }
 
   // Call an external API endpoint to get posts
-  const postsFetch: Post[] = await fetch('http://gameblog.local/wp-json/wp/v2/posts').then((res) => res.json());
+  const postsFetch: Page[] = await fetch('http://gameblog.local/wp-json/wp/v2/posts').then((res) => res.json());
 
   // Get the paths we want to prerender based on posts
   const paths = postsFetch.map((post) => ({
@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 
 //get blog data fetch
 async function getPost(slug: string): Promise<BlogPageService> {
-  const postsFetch: Post[] = await fetch(`http://gameblog.local/wp-json/wp/v2/posts?slug=${slug}&per_page=1`).then((res) => res.json());
+  const postsFetch: Page[] = await fetch(`http://gameblog.local/wp-json/wp/v2/posts?slug=${slug}&per_page=1`).then((res) => res.json());
   const postRender = new BlogPageService(postsFetch[0]);
   return postRender;
 }
@@ -39,7 +39,7 @@ async function getPost(slug: string): Promise<BlogPageService> {
 
 // Multiple versions of this page will be statically generated
 // using the `params` returned by `generateStaticParams`
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Post({ params }: { params: { slug: string } }) {
 
   const { slug } = params;
   const post = await getPost(slug);
