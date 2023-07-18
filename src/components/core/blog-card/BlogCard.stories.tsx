@@ -6,7 +6,13 @@ import { PageContent } from './../../layouts/page-content/PageContent';
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta: Meta<typeof BlogCard> = {
   title: 'Core/BlogCard',
-  component: BlogCard
+  component: BlogCard,
+  args: {
+    src: "https://cdn2.whatoplay.com/news/an-everyday-story-demo.webp",
+    alt: "test",
+    title: "Card Title",
+    description: "Card Description"
+  },
 };
 
 export default meta;
