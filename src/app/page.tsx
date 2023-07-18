@@ -1,10 +1,5 @@
-import Error from 'next/error';
 import { Page } from '@/types';
 import PageService from '@/services/page/parsePage';
-
-type PageError = {
-  errorCode: number;
-}
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
