@@ -1,6 +1,12 @@
 import { emptyPost, renderedHeadings, testPost } from '@/types/testTypes';
 import BlogPageService from './blogPage';
 import '@testing-library/jest-dom';
+import { WPTags } from '@/services/utils';
+
+const testOptions = {
+  tags: [WPTags.FeatureBlogImage, WPTags.Heading, WPTags.PageImage, WPTags.PostCard],
+  htmlContent: true
+}
 
 describe('BlogPageService', () => {
   const blogPageService = new BlogPageService(testPost);
@@ -8,16 +14,16 @@ describe('BlogPageService', () => {
   describe('parseContent', () => {
 
     it('When given empty string body return empty array', () => {
-      expect(blogPageService.parseContent("")).toHaveLength(0);
+      expect(blogPageService.parseContent("", testOptions)).toHaveLength(0);
     });
 
     it('Render 5 html elements into Array and filter out new lines + spaces', () => {
-      const result = blogPageService.parseContent(testPost.content.rendered);
+      const result = blogPageService.parseContent(testPost.content.rendered, testOptions);
       expect(result).toHaveLength(2);
     });
 
     it('Ensure all array elements are HTML/React Elements', () => {
-      const result = blogPageService.parseContent(testPost.content.rendered);
+      const result = blogPageService.parseContent(testPost.content.rendered, testOptions);
       expect((result as JSX.Element[])[0].type).toBe('h2');
       expect((result as JSX.Element[])[1].type).toBe('p');
     });
@@ -27,14 +33,14 @@ describe('BlogPageService', () => {
   describe('parseBlogMeta', () => {
 
     it('When given empty params, generate empty properties (incase of preview, draft, etc)', () => {
-      const result = blogPageService.parseBlogMeta(emptyPost);
+      const result = blogPageService.parseMeta(emptyPost);
       expect(result.slug).toBe("");
       expect(result.title).toBe("");
       expect(result.date).toBe("");
     });
 
     it('Ensure Meta Properties are generated correctly', () => {
-      const result = blogPageService.parseBlogMeta(testPost);
+      const result = blogPageService.parseMeta(testPost);
       expect(result.slug).toBe("hello-world-2");
       expect(result.title).toBe("Hello World 2");
       expect(result.date).toBe("Thu Jul 13 2023");
