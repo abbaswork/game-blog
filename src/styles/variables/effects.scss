@@ -1,0 +1,26 @@
+@mixin shadow {
+    filter: drop-shadow(7px 9px 3px #000);
+}
+
+@mixin sticky {
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+}
+
+@mixin zoom {
+    transition: transform .2s;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+@mixin flip {
+    transition: transform .1s;
+
+    &:hover {
+       // -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+}

@@ -7,10 +7,7 @@
   padding: 2rem 0.5rem;
   min-height: 100vh;
 
-  @include large-mobile-view() {
+  @include mobile-view() {
     display: none;
   }
-
-  //theme properties
-  background-color: #230A35;
 }

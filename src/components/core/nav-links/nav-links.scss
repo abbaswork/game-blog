@@ -10,6 +10,7 @@
 
   .navlink-container {
     width: 50%;
+    height: 100vh;
   }
 
   //display links, in a col format in the overlay 
@@ -27,7 +28,7 @@
 .navlink-container {
 
   //overlay properties, only active on mobile displays
-  @include large-mobile-view() {
+  @include mobile-view() {
     height: 100%;
     width: 0%;
     position: fixed;

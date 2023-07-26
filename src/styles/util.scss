@@ -16,8 +16,14 @@
     }
 }
 
-@mixin large-mobile-view() {
+@mixin mobile-view() {
     @media only screen and (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin sm-mobile-view() {
+    @media only screen and (max-width: 374px) {
         @content;
     }
 }
