@@ -2,9 +2,11 @@ import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Page, ParsedContent, ReplaceOptions } from '@/types';
 import { WPTags } from '../../utils';
 import PageService from '../parsePage';
+import { Icons } from '@/components/core/icons/Icon';
+import { medalArray } from '@/components/core/icons/types';
 
 const parseBlogBodyOptions: ReplaceOptions = {
-    tags: [WPTags.Heading, WPTags.PageImage],
+    tags: [WPTags.Heading, WPTags.PageImage, WPTags.RatingList, WPTags.GameTags],
     htmlContent: true
 }
 
@@ -39,9 +41,11 @@ export default class BlogPageService extends PageService {
             return <></>;
 
         //otherwise generate list items based on headers
+        var tocIndex = 0;
         (content as React.JSX.Element[]).map((element: React.JSX.Element, index) => {
             if (element.type === 'h2') {
-                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{element.props.children}</a></li>);
+                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{tocIndex < 3 ? <Icons icon={medalArray[tocIndex]}/> : (<span style={{paddingLeft: "0.5rem"}}>{tocIndex + 1 + ". "}</span>)}{element.props.children[0]}</a></li>);
+                tocIndex++;
             }
         });
 

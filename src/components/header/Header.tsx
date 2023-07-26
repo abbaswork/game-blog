@@ -2,13 +2,11 @@ import React from 'react';
 import { NavLinks } from '../core/nav-links/NavLinks';
 import './header.scss';
 import { Searchbar } from '../core/searchbar/Searchbar';
+import LogoImg from "./../assets/logo-transparent.svg";
+import Image from 'next/image';
 
 const Logo = () => (
-  <div style={{
-    width:  "1.5rem",
-    height: "1.5rem",
-    backgroundColor: "#f6ca56"
-  }}/>
+  <Image className='logo' src={LogoImg} alt="logo" />
 );
 
 export const Header = () => (

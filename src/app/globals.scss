@@ -3,6 +3,7 @@
 //import global scss styles
 @import './../styles/typography.scss';
 @import './../styles/layout.scss';
+@import './../styles/variables/colors.scss';
 
 
 :root {
@@ -107,6 +108,10 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+li {
+  list-style: none;
 }
 
 /* @media (prefers-color-scheme: dark) {

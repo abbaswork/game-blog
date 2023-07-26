@@ -1,15 +1,24 @@
 @import "./../../styles/layout.scss";
 @import "./../../styles/util.scss";
+@import "./../../styles/variables/effects.scss";
+
+.logo {
+  width:  2.25rem;
+  height: 2.25rem;
+  @include flip;
+}
 
 .header-container {
   /* standard padding for header */
   padding: 15px 20px;
-  background-color: #351150;
+  background-color: var(--secondary-dark);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  @include shadow;
+  @include sticky;
 
   &.nav-layout {
     @include flex-spread;
-    // @include large-mobile-view {
+    // @include mobile-view {
 
     // }
   }
@@ -25,7 +34,7 @@
   color: white;
 
   //switch order on mobile
-  @include large-mobile-view {
+  @include mobile-view {
     flex-direction: row;
   }
 }

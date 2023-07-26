@@ -1,18 +1,27 @@
+@import "./../../../styles/variables/effects.scss";
+//@import "./../../../styles/variables/colors.scss";
+
 .list-container {
   padding: 1rem;
-  background-color: #351150;
+  background-color: var(--secondary-dark);
   color: white;
 
   h2 {
-    color: #F6CA56
+    color: var(--primary-light);
   }
 
   a {
     line-height: 1.75rem;
+    display: flex;
+    align-items: center;
   }
 
   .default-list {
     padding-top: 1rem;
     list-style: none;
   }
+}
+
+.sidebar {
+  @include shadow;
 }

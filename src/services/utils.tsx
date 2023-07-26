@@ -17,7 +17,9 @@ export enum WPTags {
     FeatureBlogImage = "wp-block-post-featured-image",
     PageImage = "wp-block-image",
     Heading = "wp-block-heading",
-    PostCard = "post type-post status-publish"
+    PostCard = "post type-post status-publish",
+    RatingList = "rating-list",
+    GameTags = "game-tags"
 }
 
 /**

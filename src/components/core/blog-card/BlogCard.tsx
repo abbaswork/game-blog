@@ -9,13 +9,25 @@ interface Props {
   title: string;
   href: string;
   description?: string;
+  postCard?: true;
 }
 
-export const BlogCard = ({ src, alt, title, href, description }: Props) => {
+export const BlogCard = ({ src, alt, title, href, description, postCard = true }: Props) => {
 
   //if the image or title is undefined, don't render component
   if (src === "" || title === "")
     return <></>;
+
+  const blogDescription = () => {
+    if(postCard && description){
+      var splitPostIntro = description.split("Introduction");
+      var tags = splitPostIntro[0].replace("Metrics", "");
+      var intro = splitPostIntro[1].replace("[…]","...");
+      return(<><p>{tags}</p><br/><p>{intro}</p></>);
+    } else {
+      return <p>{description}</p>;
+    }
+  }
 
   return (
     <div className='blog-card'>
@@ -31,7 +43,7 @@ export const BlogCard = ({ src, alt, title, href, description }: Props) => {
         />
         <div className='card-bottom'>
           <h3>{title}</h3>
-          <p>{description}</p>
+          {blogDescription()}
         </div>
       </Link>
     </div>

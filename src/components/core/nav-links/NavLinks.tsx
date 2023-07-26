@@ -4,6 +4,7 @@ import React from 'react';
 import './nav-links.scss';
 import { useRef } from "react"
 import { useOutsideRefClick } from './../../util/util';
+import Link from 'next/link';
 
 //client component given the link behaviour
 
@@ -14,7 +15,7 @@ export const NavLinks = () => {
 
   //set ref, pass handler for setting the dropdown when clicked outside of the ref
   const overlayRef = useRef(null);
-  
+
   useOutsideRefClick(overlayRef, () => setshowMobileOverlay(false));
 
   return (
@@ -31,9 +32,7 @@ export const NavLinks = () => {
       {/* container that renders links as inline or in an overlay based on device */}
       <div className='navlink-container' ref={overlayRef}>
         <div className='mobile-links'>
-          <a>Link 1</a>
-          <a>Link 2</a>
-          <a>Link 3</a>
+          <Link href="/">Home</Link>
         </div>
       </div>
     </div>

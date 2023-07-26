@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import BlogPageService from "@/services/page/blog/blogPage";
 import { Page } from "@/types";
 
@@ -17,7 +18,9 @@ export async function getStaticPaths() {
   }
 
   // Call an external API endpoint to get posts
-  const postsFetch: Page[] = await fetch('http://gameblog.local/wp-json/wp/v2/posts').then((res) => res.json());
+  const postsFetch: Page[] = await fetch('http://gameblog.local/wp-json/wp/v2/posts',
+    { next: { revalidate: 0 } }
+  ).then((res) => res.json());
 
   // Get the paths we want to prerender based on posts
   const paths = postsFetch.map((post) => ({
@@ -31,11 +34,19 @@ export async function getStaticPaths() {
 
 //get blog data fetch
 async function getPost(slug: string): Promise<BlogPageService> {
-  const postsFetch: Page[] = await fetch(`http://gameblog.local/wp-json/wp/v2/posts?slug=${slug}&per_page=1`).then((res) => res.json());
+  const postsFetch: Page[] = await fetch(`http://gameblog.local/wp-json/wp/v2/posts?slug=${slug}&per_page=1`,
+    { next: { revalidate: 0 } },
+  ).then((res) => res.json());
   const postRender = new BlogPageService(postsFetch[0]);
   return postRender;
 }
 
+export  function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const title = params.slug.replaceAll("-", " ");
+  return {
+    title: title
+  }
+}
 
 // Multiple versions of this page will be statically generated
 // using the `params` returned by `generateStaticParams`
@@ -46,13 +57,13 @@ export default async function Post({ params }: { params: { slug: string } }) {
 
   //return parsed page content
   return (
-    <>
+    <article className="blog-page">
       {post.featuredImage}
       <h1 className="wp-title">{post.meta.title}</h1>
       <p>Published: {post.meta.date}</p>
       {post.tableOfContents}
       {post.content}
-    </>
+    </article>
   )
 }
 

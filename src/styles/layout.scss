@@ -15,10 +15,10 @@
 
 .page-layout {
     display: flex;
-    //align-items: center;
     justify-content: center;
-    background-color: #230A35;
+    background-color: var(--primary-dark);
     color: white;
+    padding-top: 6rem;
 }
 
 .page-content {
@@ -27,13 +27,86 @@
     width: 66%;
     padding: 2rem 2.5rem;
     min-height: 100vh;
+    background-color: var(--primary-dark);
 
-    @include large-mobile-view() {
+    @include mobile-view() {
         width: 100%;
         padding: 1.5rem;
         max-width: 768px;
     }
+}
 
-    //theme properties
-    background-color: #230A35;
+//padding inbetween items on page
+.home-page,
+.blog-page {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    p {
+        color: #dbddef;
+    }
+}
+
+//layout for wp feature posts block
+.wp-block-post-template {
+    &.is-layout-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+}
+
+//layout for wp-table
+//TODO move to tables file
+.wp-block-table {
+    table {
+        width: 100%;
+    }
+
+    th {
+        border: 1px solid white;
+        text-align: left;
+        padding: 1rem;
+    }
+}
+
+//applied to wp list components when converting to column based list, ie. tags
+.horizontal-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.bottom-border {
+    border-bottom: 2px solid white;
+    padding-bottom: 1rem;
+}
+
+//list item for WP List
+.rating-list {
+
+    .rating-item {
+        display: flex;
+        align-items: center;
+        //gap: 1rem;
+        // overflow-wrap: nowrap;
+
+        span {
+            width: 15rem;
+            text-overflow: ellipsis;
+            @include mobile-view() {
+                width: 13rem;
+            }
+            @include sm-mobile-view() {
+                width: 10rem;
+            }
+        }
+
+    }
+
+    .rating-item:not(:last-child) {
+        margin-bottom: .3rem;
+    }
 }
