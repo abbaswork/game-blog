@@ -31,7 +31,7 @@ export default function RootLayout({
 
           {/* Layout for side panel */}
           <SidePanel>
-            <ListContainer title='Sidebar'>
+            <ListContainer title='Sidebar' className='sidebar'>
               <>
                 <li>New Blogs Coming Soon</li>
               </>
