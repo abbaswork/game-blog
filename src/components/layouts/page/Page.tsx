@@ -1,5 +1,4 @@
 import React from 'react';
-import './page.scss';
 import { Header } from './../../header/Header';
 import { PageContent } from '../page-content/PageContent';
 import { SidePanel } from '../side-panel/SidePanel';
@@ -16,7 +15,7 @@ export const Page: React.FC = () => {
       <div className='page-layout'>
         {/* Render Basic Blog Content*/}
         <PageContent>
-          <HeroImage />
+          <HeroImage src="https://cdn2.whatoplay.com/news/an-everyday-story-demo.webp" alt="test" />
           <Heading> Title </Heading>
 
           <SubHeading>Introduction </SubHeading>

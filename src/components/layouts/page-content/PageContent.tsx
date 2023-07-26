@@ -1,5 +1,4 @@
-import React, { Children } from 'react';
-import './page-content.scss';
+import React from 'react';
 
 
 interface Props {
