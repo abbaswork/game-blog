@@ -3,6 +3,10 @@ import parse, { DOMNode, attributesToProps, domToReact } from 'html-react-parser
 import { WPTags, getBlogCardAttribs, getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
 import { BlogCard } from '@/components/core/blog-card/BlogCard';
+import { RankLabel } from '@/components/core/rank-label/RankLabel';
+import { GameTag } from '@/components/core/game-tag/GameTag';
+import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
+import { RatingIconsTypes } from '@/components/core/rating-icons/types';
 
 const parsePageBodyOptions: ReplaceOptions = {
     tags: [WPTags.Heading, WPTags.FeatureBlogImage, WPTags.PageImage, WPTags.PostCard],
@@ -74,13 +78,13 @@ export default class PageService {
 
             //element components with classNames, meant to be parsed differently
             let className = domNode.attribs.class;
+            let tag = domNode.tagName;
             let acceptString = accept.toString();
 
             if (className.includes(WPTags.PostCard)) {
                 if (acceptString.includes(WPTags.PostCard)) {
                     const props = getBlogCardAttribs(domNode);
-                    console.log('props: ', props);
-                    return <BlogCard {...props}/>
+                    return <BlogCard {...props} />
                 } else {
                     return <></>
                 }
@@ -106,12 +110,98 @@ export default class PageService {
                 }
             }
 
-            if (className.includes(WPTags.Heading)) {
+            if (className.includes(WPTags.Heading) && tag === 'h2') {
                 if (acceptString.includes(WPTags.Heading)) {
+
                     const props = attributesToProps(domNode.attribs);
-                    const comp = domToReact(domNode.children);
+                    var comp = domToReact(domNode.children) as string;
+                    const length = comp.length;
+                    var rank: JSX.Element | null = null;
+
+                    //check if the heading includes a ranking and replace it with ranking
+                    if (!isNaN(comp[length - 1] as any)) {
+                        const rankN = comp.replace(/[^\d.-]/g, '');
+                        rank = <RankLabel rank={Number(rankN)} />
+                        comp = comp.replace(rankN, "");
+                    }
+
                     const id = (comp + "").replaceAll(" ", "-");
-                    return (<h2 id={id} {...props}>{comp}</h2>);
+                    return (<h2 id={id} {...props}>{comp}{rank}</h2>);
+                } else {
+                    return <></>
+                }
+            }
+
+            if (className.includes(WPTags.RatingList)) {
+                if (acceptString.includes(WPTags.RatingList)) {
+
+                    //array of list items to render
+                    var listItems: JSX.Element[] = [];
+                    const children = domNode.children;
+
+                    //for each child extract text items and render in list item
+                    children.map((listItem) => {
+                        const listItemNode = (listItem as any).children as DOMNode[];
+                        var listText = domToReact(listItemNode);
+                        var lastText: string = "";
+                        var index = 0;
+                        var rating = "";
+                        var icon: RatingIconsTypes = RatingIconsTypes.swords;
+
+                        //if the text is a string vs array of strings
+                        if ((typeof listText) === "string") {
+                            //get rating from string
+                            lastText = listText as string;
+                            rating = lastText[lastText.length - 1];
+
+                            //replace list text string
+                            listText = lastText.replace(rating, "");
+                        } else {
+                            //get rating from last string in array
+                            var anyText = listText as any;
+                            index = anyText.length - 1;
+                            lastText = anyText[index];
+                            var rating = lastText.replace(/\D/g, '');
+
+                            if (anyText[0] && anyText[0].props && anyText[0].props.children.includes("Players")) {
+                                icon = RatingIconsTypes.gamepad;
+                            }
+
+                            //replace number in last string
+                            lastText.replace(rating, "");
+                            anyText[index] = lastText.replace(rating, "");
+                            listText = anyText;
+                        }
+
+                        listItems.push(<li className='rating-item'><span>{listText}</span><RatingIcons rank={Number(rating)} icon={icon} /></li>);
+
+                    });
+
+                    return (
+                        <ul className='rating-list'>
+                            {listItems}
+                        </ul>
+                    );
+                } else {
+                    return <></>
+                }
+            }
+
+            if (className.includes(WPTags.GameTags)) {
+                if (acceptString.includes(WPTags.GameTags)) {
+
+                    var listItems: JSX.Element[] = [];
+                    const children = domNode.children;
+
+                    children.map((listItem) => {
+                        if ((listItem as any).children[0]) {
+                            const text = (listItem as any).children[0].data as string;
+                            listItems.push(<li><GameTag>{text}</GameTag></li>);
+                        }
+                    });
+
+                    return (<ul className='horizontal-list'>{listItems}</ul>)
+                        ;
                 } else {
                     return <></>
                 }
