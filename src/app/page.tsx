@@ -1,5 +1,6 @@
 import { Page } from '@/types';
 import PageService from '@/services/page/parsePage';
+import { Metadata } from 'next';
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
@@ -8,12 +9,16 @@ async function getPage(slug: string): Promise<PageService> {
   return pageRender;
 }
 
+export const metadata: Metadata = {
+  title: "Metric Gamer: curated list of ranked games for PS2 and more"
+}
+
 export default async function Home() {
 
   const page = await getPage('home-page');
 
   return (
-    <main>
+    <main className='home-page'>
       {page.content}
     </main>
   )
