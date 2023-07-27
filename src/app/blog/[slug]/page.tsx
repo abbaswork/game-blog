@@ -7,7 +7,7 @@ import { Page } from "@/types";
  * Generate static paths for blog pages
  * @returns 
  */
-export async function getStaticPaths() {
+export async function generateStaticParams() {
 
   // When this is true (in preview environments) don't prerender any static pages, (faster builds, but slower initial page load)
   if (process.env.SKIP_BUILD_STATIC_GENERATION) {
@@ -18,25 +18,19 @@ export async function getStaticPaths() {
   }
 
   // Call an external API endpoint to get posts
-  const postsFetch: Page[] = await fetch('http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts',
-    { next: { revalidate: 0 } }
-  ).then((res) => res.json());
+  const postsFetch: Page[] = await fetch('http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts').then((res) => res.json());
 
   // Get the paths we want to prerender based on posts
-  const paths = postsFetch.map((post) => ({
-    params: { slug: post.slug },
-  }))
+  const paths = postsFetch.map((post) => ({ slug: post.slug }));
 
   // { fallback: false } means other routes should 404
-  return { paths, fallback: false }
+  return paths;
 }
 
 
 //get blog data fetch
 async function getPost(slug: string): Promise<BlogPageService> {
-  const postsFetch: Page[] = await fetch(`http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts?slug=${slug}&per_page=1`,
-    { next: { revalidate: 0 } },
-  ).then((res) => res.json());
+  const postsFetch: Page[] = await fetch(`http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts?slug=${slug}&per_page=1`).then((res) => res.json());
   const postRender = new BlogPageService(postsFetch[0]);
   return postRender;
 }

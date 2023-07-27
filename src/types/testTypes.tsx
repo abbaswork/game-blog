@@ -94,9 +94,9 @@ export const testPost: Page =
 }
 
 export const renderedHeadings = [
-    <h2 className="wp-block-heading">Test 1</h2>,
-    <h2 className="wp-block-heading">Test 2</h2>,
-    <h2 className="wp-block-heading">Test 3</h2>,
+    <h2 key="1" className="wp-block-heading">Test 1</h2>,
+    <h2 key="2" className="wp-block-heading">Test 2</h2>,
+    <h2 key="3" className="wp-block-heading">Test 3</h2>,
 ]
 
 export const emptyPost: Page = {
