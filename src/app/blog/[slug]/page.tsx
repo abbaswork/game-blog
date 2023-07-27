@@ -9,13 +9,13 @@ import { Page } from "@/types";
  */
 export async function generateStaticParams() {
 
-  // When this is true (in preview environments) don't prerender any static pages, (faster builds, but slower initial page load)
-  if (process.env.SKIP_BUILD_STATIC_GENERATION) {
-    return {
-      paths: [],
-      fallback: 'blocking',
-    }
-  }
+  // // When this is true (in preview environments) don't prerender any static pages, (faster builds, but slower initial page load)
+  // if (process.env.SKIP_BUILD_STATIC_GENERATION) {
+  //   return {
+  //     paths: [],
+  //     fallback: 'blocking',
+  //   }
+  // }
 
   // Call an external API endpoint to get posts
   const postsFetch: Page[] = await fetch('http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts').then((res) => res.json());
