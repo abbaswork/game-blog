@@ -10,7 +10,7 @@ const nextConfig = {
           },
           {
             protocol: 'http',
-            hostname: 'gameblog.local',
+            hostname: '18.213.34.154',
             port: '',
             pathname: '/wp-content/**',
           },

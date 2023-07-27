@@ -18,7 +18,7 @@ export async function getStaticPaths() {
   }
 
   // Call an external API endpoint to get posts
-  const postsFetch: Page[] = await fetch('http://gameblog.local/wp-json/wp/v2/posts',
+  const postsFetch: Page[] = await fetch('http://18.213.34.154/wp-json/wp/v2/posts',
     { next: { revalidate: 0 } }
   ).then((res) => res.json());
 
@@ -34,7 +34,7 @@ export async function getStaticPaths() {
 
 //get blog data fetch
 async function getPost(slug: string): Promise<BlogPageService> {
-  const postsFetch: Page[] = await fetch(`http://gameblog.local/wp-json/wp/v2/posts?slug=${slug}&per_page=1`,
+  const postsFetch: Page[] = await fetch(`http://18.213.34.154/wp-json/wp/v2/posts?slug=${slug}&per_page=1`,
     { next: { revalidate: 0 } },
   ).then((res) => res.json());
   const postRender = new BlogPageService(postsFetch[0]);
