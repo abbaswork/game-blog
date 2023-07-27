@@ -56,12 +56,12 @@ describe('BlogPageService', () => {
     });
 
     it('When given array of elements that dont include header, return <>', () => {
-      const result = blogPageService.parseTOC([<p>test</p>, <p>test2</p>]);
+      const result = blogPageService.parseTOC([<p key="1">test</p>, <p  key="2">test2</p>]);
       expect(result).toStrictEqual(<></>);
     });
 
     it('Ensure Table Of Contents is generated when headers are included in the component array', () => {
-      const result = blogPageService.parseTOC([<h2>test</h2>, <h2>test2</h2>]);
+      const result = blogPageService.parseTOC([<h2 key="1">test</h2>, <h2 key="2">test2</h2>]);
       expect(result.props.children).toHaveLength(2);
     });
 
