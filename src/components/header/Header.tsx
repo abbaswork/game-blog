@@ -4,9 +4,12 @@ import './header.scss';
 import { Searchbar } from '../core/searchbar/Searchbar';
 import LogoImg from "./../assets/logo-transparent.svg";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Logo = () => (
-  <Image className='logo' src={LogoImg} alt="logo" />
+  <Link href="/">
+    <Image className='logo' src={LogoImg} alt="logo" />
+  </Link>
 );
 
 export const Header = () => (
@@ -18,7 +21,7 @@ export const Header = () => (
     </div>
 
     <div>
-     <Searchbar/>
+      <Searchbar />
     </div>
 
   </header>

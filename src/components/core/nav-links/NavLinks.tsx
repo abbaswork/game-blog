@@ -32,7 +32,7 @@ export const NavLinks = () => {
       {/* container that renders links as inline or in an overlay based on device */}
       <div className='navlink-container' ref={overlayRef}>
         <div className='mobile-links'>
-          <Link href="/">Home</Link>
+          <Link onClick={() => setshowMobileOverlay(false)} href="/">Home</Link>
         </div>
       </div>
     </div>
