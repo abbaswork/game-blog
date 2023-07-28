@@ -19,6 +19,10 @@
     background-color: var(--primary-dark);
     color: white;
     padding-top: 6rem;
+
+    @include mobile-view() {
+        flex-direction: column;
+      }
 }
 
 .page-content {

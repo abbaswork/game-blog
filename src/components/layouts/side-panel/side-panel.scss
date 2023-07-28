@@ -8,6 +8,9 @@
   min-height: 100vh;
 
   @include mobile-view() {
-    display: none;
+    //display: none;
+    max-width: 776px;
+    width: 100%;
+    padding: 1.5rem;
   }
 }
