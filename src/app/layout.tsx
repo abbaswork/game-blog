@@ -29,6 +29,9 @@ export default function RootLayout({
           gtag('config', 'G-W9CVD1Y1EF');
         `}
       </Script>
+      <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6729388944848700"
+        strategy='beforeInteractive'
+        crossOrigin="anonymous" />
       <body className={inter.className}>
 
         <Header />
@@ -48,6 +51,20 @@ export default function RootLayout({
                 <li>New Blogs Coming Soon</li>
               </>
             </ListContainer>
+
+            <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6729388944848700"
+              crossOrigin="anonymous" />
+            <ins className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-6729388944848700"
+              data-ad-slot="8400791358"
+              data-ad-format="auto"
+              data-full-width-responsive="true"></ins>
+            <Script>
+              {`
+              (adsbygoogle = window.adsbygoogle || []).push({ });
+              `}
+            </Script>
           </SidePanel>
 
         </div>
