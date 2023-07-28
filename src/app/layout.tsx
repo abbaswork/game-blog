@@ -3,6 +3,7 @@ import './globals.scss'
 import { Inter } from 'next/font/google'
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel'
 import { ListContainer } from '@/components/core/list-container/ListContainer'
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +19,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-W9CVD1Y1EF" />
+      <Script id="google-analytics">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', 'G-W9CVD1Y1EF');
+        `}
+      </Script>
       <body className={inter.className}>
+
         <Header />
 
         {/* Layout for page */}
