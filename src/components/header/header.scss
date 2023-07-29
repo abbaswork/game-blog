@@ -29,9 +29,13 @@
   //default padding/setup
   display: flex;
   flex-direction: row-reverse;
-  gap: 1rem;
+  // gap: 1rem; -- not supported in earlier ios
   align-items: center;
   color: white;
+
+  a{
+    margin-right: 1rem;
+  }
 
   //switch order on mobile
   @include mobile-view {

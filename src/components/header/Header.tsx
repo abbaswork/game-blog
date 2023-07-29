@@ -20,9 +20,7 @@ export const Header = () => (
       <Logo />
     </div>
 
-    <div>
       <Searchbar />
-    </div>
 
   </header>
 );
