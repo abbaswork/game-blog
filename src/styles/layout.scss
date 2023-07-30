@@ -45,12 +45,18 @@
 .blog-page {
     height: auto;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    // gap: 0.75rem;
+    display: block;
 
+    //add padding between items
     :not(:last-child) {
         margin-bottom: .75rem;
+    }
+
+    //adjust for lists that appear inside page
+    .list-container {
+        li {
+            margin-bottom: 0rem;
+        }
     }
 
     p {
