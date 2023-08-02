@@ -38,7 +38,10 @@ async function getPost(slug: string): Promise<BlogPageService> {
 export  function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const title = params.slug.replaceAll("-", " ");
   return {
-    title: title
+    title: title,
+    alternates: {
+      canonical: `/blog/${params.slug}`
+    }
   }
 }
 
