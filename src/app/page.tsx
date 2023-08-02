@@ -10,7 +10,10 @@ async function getPage(slug: string): Promise<PageService> {
 }
 
 export const metadata: Metadata = {
-  title: "Metric Gamer: curated list of ranked games for PS2 and more"
+  title: "Metric Gamer: curated list of ranked games for PS2 and more",
+  alternates : {
+    canonical: "/"
+  }
 }
 
 export default async function Home() {
