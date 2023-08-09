@@ -39,6 +39,7 @@ export  function generateMetadata({ params }: { params: { slug: string } }): Met
   const title = params.slug.replaceAll("-", " ");
   return {
     title: title,
+    description: `Check out the ranked list of ${title}`,
     alternates: {
       canonical: `/blog/${params.slug}`
     }
