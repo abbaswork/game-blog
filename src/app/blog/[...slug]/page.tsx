@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 import BlogPageService from "@/services/page/blog/blogPage";
 import { Page } from "@/types";
+import { wpPreviewHeaders } from '@/config/api';
+import { draftMode } from 'next/headers';
+import { useSearchParams } from 'next/navigation';
 
 
 /**
@@ -18,10 +21,12 @@ export async function generateStaticParams() {
   // }
 
   // Call an external API endpoint to get posts
-  const postsFetch: Page[] = await fetch('http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts').then((res) => res.json());
+  const postsFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts`, {
+    headers: wpPreviewHeaders
+  }).then((res) => res.json());
 
   // Get the paths we want to prerender based on posts
-  const paths = postsFetch.map((post) => ({ slug: post.slug }));
+  const paths = postsFetch.map((post) => ({ slug: [post.slug] }));
 
   // { fallback: false } means other routes should 404
   return paths;
@@ -29,14 +34,27 @@ export async function generateStaticParams() {
 
 
 //get blog data fetch
-async function getPost(slug: string): Promise<BlogPageService> {
-  const postsFetch: Page[] = await fetch(`http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/posts?slug=${slug}&per_page=1`).then((res) => res.json());
-  const postRender = new BlogPageService(postsFetch[0]);
+async function getPost(slug: string[]): Promise<BlogPageService> {
+
+  //check draft mode and get params
+  const { isEnabled } = draftMode();
+
+  //create url parts, search params change based on url type
+  const baseURL = `${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts`;
+  var searchURL = isEnabled ? `/${slug[1]}` : `?slug=${slug[0]}&per_page=1`;
+
+  const postsFetch: Page[] = await fetch(`${baseURL}${searchURL}`, {
+    headers: wpPreviewHeaders
+  }).then((res) => res.json());
+
+  //console.log('posts Fetch: ', postsFetch);
+
+  const postRender = new BlogPageService(postsFetch[0] ? postsFetch[0] : postsFetch as any);
   return postRender;
 }
 
-export  function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const title = params.slug.replaceAll("-", " ");
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const title = params.slug[0].replaceAll("-", " ");
   return {
     title: title,
     description: `Check out the ranked list of ${title}`,
@@ -48,7 +66,7 @@ export  function generateMetadata({ params }: { params: { slug: string } }): Met
 
 // Multiple versions of this page will be statically generated
 // using the `params` returned by `generateStaticParams`
-export default async function Post({ params }: { params: { slug: string } }) {
+export default async function Post({ params }: { params: { slug: string[] } }) {
 
   const { slug } = params;
   const post = await getPost(slug);
