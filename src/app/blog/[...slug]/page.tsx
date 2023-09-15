@@ -36,12 +36,13 @@ export async function generateStaticParams() {
 //get blog data fetch
 async function getPost(slug: string[]): Promise<BlogPageService> {
 
-  //check draft mode and get params
+  //check draft mode and get params, draft mode can ONLY by enabled through draft endpoint auth
   const { isEnabled } = draftMode();
+  const draftPage = isEnabled && slug[0] === 'draft';
 
   //create url parts, search params change based on url type
   const baseURL = `${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts`;
-  var searchURL = isEnabled ? `/${slug[1]}` : `?slug=${slug[0]}&per_page=1`;
+  var searchURL = draftPage ? `/${slug[1]}` : `?slug=${slug[0]}&per_page=1`;
 
   const postsFetch: Page[] = await fetch(`${baseURL}${searchURL}`, {
     headers: wpPreviewHeaders
