@@ -1,34 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a headless CMS project that uses Next JS as the static website generator and WP as the headless CMS. It's hosted in AWS using an EC2 container for the WP setup and an Amplify App for the NextJs App.
 
 ## Getting Started
 
-First, run the development server:
+Setup:
+The following requires the env variables to be setup in order to use headless functionality
+- WP_DOMAIN="<name of wp domain>" //Refer to "Local" app if testing using a local WP setup, otherwise use domain in your wp url.
+- WP_PROTOCOL="<http or https>"
+- WP_USERNAME="<email for wp user>"
+- WP_PASSWORD="<generated password for wp user>"
+- WP_PREVIEW_TOKEN="<generate a secure token>" //please note this token must also be setup in the wp theme, through the custom redirect funtion for previews.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+WP Setup:
+Before being able to run locally the WP setup must be setup correctly:
+- Generate a password for your user in http://<your-wordpress-url>/wp-admin/profile.php 
+- Select Post name in the perma link structure, this can be set through settings at http://<your-wordpress-url>/wp-admin/options-permalink.php
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before starting the project, ensure WP is setup correctly and if running locally ensure that "Local" is running.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Storybook:
+Storybook is used to manage the design system and house the components used in the site. To run it, use the following:
+- `npm run storybook`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Headless App:
+Run the following in order to start a local version of the website that grabs the data from your headless CMS.
+- `npm run dev`
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Deployment is setup in AWS using:
+- EC2 Container, with WP installed, please note that this requires PHP and the DB requirments to also be installed correctly to support wp, for more info refer to these setup docs: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hosting-wordpress.html
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Amplify App with Next Configuration, the env vars should be setup correctly
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Webhooks
 
-## Deploy on Vercel
+In order to deploy updates made to blog pages in WP, webhooks are setup in the Amplify Setup to trigger rebuilds when posts are published or updated.
+- The webhooks can be made to trigger in WP using a plugin or through php functions.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Preview
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+In order to have the preview working correctly, the user needs to generate a password for thier user in wp and store it in the env file. Ontop of this an additional secret token needs to be generated and authenticated when the preview link is hit.
+
+- Custom Functions are used in the theme to redirect the review links to the Next App.
+- The Next App uses a draft route for the previews, these are setup to grab data on the fly as opposed to statically generating the pages per build like the published pages.
+- The API requests in the Next App use the username and password to access the draft data.
+- A secret token is generated and setup in the WP theme and also stored in the app. This is validated in the redirect links
