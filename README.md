@@ -4,6 +4,8 @@ This is a headless CMS project that uses Next JS as the static website generator
 
 ### WP Setup:
 Before being able to run locally the WP setup must be setup correctly:
+- Download and update the theme file found (here)[https://github.com/abbaswork/headless-wp-theme]
+- Zip the theme file and upload into wordpress instance
 - Generate an application password for your user in http://<your-wordpress-url>/wp-admin/profile.php. This will be added to the env as WP_PASSWORD
 - Select Post name in the perma link structure, this can be set through settings at http://<your-wordpress-url>/wp-admin/options-permalink.php
 
