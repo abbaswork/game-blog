@@ -7,9 +7,10 @@ import { RankLabel } from '@/components/core/rank-label/RankLabel';
 import { GameTag } from '@/components/core/game-tag/GameTag';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
 import { RatingIconsTypes } from '@/components/core/rating-icons/types';
+import { replaceWithTitleWithRating } from '../replacers/replaceComponents';
 
 const parsePageBodyOptions: ReplaceOptions = {
-    tags: [WPTags.Heading, WPTags.FeatureBlogImage, WPTags.PageImage, WPTags.PostCard],
+    tags: [WPTags.TitleWithRating, WPTags.FeatureBlogImage, WPTags.PageImage, WPTags.PostCard],
     htmlContent: true
 }
 
@@ -32,7 +33,7 @@ export default class PageService {
         this.meta = this.parseMeta(post);
     }
 
-    //take post and parse into parsedblog
+    //parse meta properties from wp pages
     parseMeta = (post: Page): Meta => {
         return {
             title: post.title.rendered,
@@ -73,6 +74,9 @@ export default class PageService {
      */
     mapComponents = (domNode: DOMNode, accept: WPTags[], htmlContent: boolean) => {
 
+        //TODO: Setup default page parser
+        //TODO: setup system that relies on on WP to setup templates + components for a page
+
         //check if node passed is an element
         if (isElement(domNode)) {
 
@@ -110,26 +114,9 @@ export default class PageService {
                 }
             }
 
-            if (className.includes(WPTags.Heading) && tag === 'h2') {
-                if (acceptString.includes(WPTags.Heading)) {
-
-                    const props = attributesToProps(domNode.attribs);
-                    var comp = domToReact(domNode.children) as string;
-                    const length = comp.length;
-                    var rank: JSX.Element | null = null;
-
-                    //check if the heading includes a ranking and replace it with ranking
-                    if (!isNaN(comp[length - 1] as any)) {
-                        const rankN = comp.replace(/[^\d.-]/g, '');
-                        rank = <RankLabel rank={Number(rankN)} />
-                        comp = comp.replace(rankN, "");
-                    }
-
-                    const id = (comp + "").replaceAll(" ", "-");
-                    return (<h2 id={id} {...props}>{comp}{rank}</h2>);
-                } else {
-                    return <></>
-                }
+            //TODO: Switch for a switch statement
+            if (className.includes(WPTags.TitleWithRating)) {
+                return replaceWithTitleWithRating(domNode);
             }
 
             if (className.includes(WPTags.RatingList)) {

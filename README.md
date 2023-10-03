@@ -32,6 +32,10 @@ Storybook is used to manage the design system and house the components used in t
 Run the following in order to start a local version of the website that grabs the data from your headless CMS.
 - `npm run dev`
 
+### Testing
+The app currently uses unit tests to test the services and can be run by:
+- `npm run test` //the name of the test can also be used to filter
+
 ## Deployment
 
 Deployment is setup in AWS using:

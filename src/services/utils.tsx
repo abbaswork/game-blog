@@ -16,7 +16,7 @@ export const isElement = (domNode: DOMNode): domNode is Element => {
 export enum WPTags {
     FeatureBlogImage = "wp-block-post-featured-image",
     PageImage = "wp-block-image",
-    Heading = "wp-block-heading",
+    TitleWithRating = "title-with-rating",
     PostCard = "post type-post status-publish",
     RatingList = "rating-list",
     GameTags = "game-tags"

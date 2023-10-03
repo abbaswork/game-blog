@@ -1,4 +1,60 @@
 import { Page } from ".";
+import { Element} from 'html-react-parser';
+
+export const mockEmptyElement: Element = {
+    name: '', //key property, usually class name
+    attribs: {},
+    type: "div" as any,
+    nodeType: 1,
+    tagName: '', //key property
+    attributes: [], //key property - usally classname
+    children: [], //key property
+    firstChild: null,
+    lastChild: null,
+    childNodes: [],
+    parent: null,
+    prev: null,
+    next: null,
+    startIndex: null,
+    endIndex: null,
+    parentNode: null,
+    previousSibling: null,
+    nextSibling: null,
+    cloneNode: undefined as any
+};
+
+export const mockTitleWithRating: Element = {
+    parent: null,
+    children: [
+        Text as any, {
+            parent: null,
+            prev: null,
+            next: null,
+            startIndex: null,
+            endIndex: null,
+            data: 'Marvel Ultimate Alliance 5',
+            type: 'text'
+        }
+    ],
+    name: 'h2',
+    attribs: { class: 'wp-block-heading title-with-rating' },
+    type: 'tag' as any,
+    nodeType: 1,
+    tagName: "",
+    attributes: [],
+    firstChild: null,
+    lastChild: null,
+    childNodes: [],
+    prev: null,
+    next: null,
+    startIndex: null,
+    endIndex: null,
+    parentNode: null,
+    previousSibling: null,
+    nextSibling: null,
+    cloneNode: undefined as any
+}
+
 
 export const testPost: Page =
 {
