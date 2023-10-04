@@ -10,7 +10,15 @@ async function getPage(slug: string): Promise<PageService> {
       headers: wpPreviewHeaders,
       next: { revalidate: 0 }
     }
-  ).then((res) => res.json());
+  ).then((res) => res.json())
+  .catch(e => console.log('e: ', e));
+
+  //this function is only run when a page that exists is accessed
+  if(!pageFetch[0]){
+    console.log('WP Error: ', pageFetch);
+    throw Error(`Page could not be retrieved from WP, check terminal for more info`);
+  }
+
   const pageRender = new PageService(pageFetch[0]);
   return pageRender;
 }
