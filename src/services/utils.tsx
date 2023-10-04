@@ -10,17 +10,6 @@ export const isElement = (domNode: DOMNode): domNode is Element => {
     return isTag && hasClass;
 };
 
-/**
- * classes that represent elements that have components meant to replace them
- */
-export enum WPTags {
-    FeatureBlogImage = "wp-block-post-featured-image",
-    PageImage = "wp-block-image",
-    Heading = "wp-block-heading",
-    PostCard = "post type-post status-publish",
-    RatingList = "rating-list",
-    GameTags = "game-tags"
-}
 
 /**
  * Simple util that extracts img properties from a node

@@ -1,4 +1,4 @@
-import { WPTags } from "@/services/utils";
+import { WPTags } from '@/constants/index';
 import { DOMNode } from "html-react-parser";
 
 //default Post obj from wp rest api
