@@ -1,12 +1,12 @@
 import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Page, ParsedContent, ReplaceOptions } from '@/types';
-import { WPTags } from '../../utils';
+import { WPTags } from '@/constants/index';
 import PageService from '../parsePage';
 import { Icons } from '@/components/core/icons/Icon';
 import { medalArray } from '@/components/core/icons/types';
 
 const parseBlogBodyOptions: ReplaceOptions = {
-    tags: [WPTags.Heading, WPTags.PageImage, WPTags.RatingList, WPTags.GameTags],
+    tags: [WPTags.TitleWithRating, WPTags.PageImage, WPTags.RatingList, WPTags.GameTags],
     htmlContent: true
 }
 

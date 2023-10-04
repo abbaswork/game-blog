@@ -1,10 +1,10 @@
 import { emptyPost, renderedHeadings, testPost } from '@/types/testTypes';
 import BlogPageService from './blogPage';
 import '@testing-library/jest-dom';
-import { WPTags } from '@/services/utils';
+import { WPTags } from '@/constants/index';
 
 const testOptions = {
-  tags: [WPTags.FeatureBlogImage, WPTags.Heading, WPTags.PageImage, WPTags.PostCard],
+  tags: [WPTags.FeatureBlogImage, WPTags.TitleWithRating, WPTags.PageImage, WPTags.PostCard],
   htmlContent: true
 }
 
