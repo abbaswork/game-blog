@@ -1,14 +1,14 @@
 import { Page, Meta, ParsedContent, ReplaceOptions } from '@/types';
 import parse, { DOMNode, attributesToProps, domToReact } from 'html-react-parser';
-import { getBlogCardAttribs, getImgAttribs, isElement } from '../utils';
+import { getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
-import { BlogCard } from '@/components/core/blog-card/BlogCard';
-import { RankLabel } from '@/components/core/rank-label/RankLabel';
 import { GameTag } from '@/components/core/game-tag/GameTag';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
 import { RatingIconsTypes } from '@/components/core/rating-icons/types';
 import { replaceWithTitleWithRating } from '../replacers/titleWithRating';
 import { WPTags } from '@/constants';
+import { replacePostCard } from '../replacers/postCard';
+import { BlogCard, BlogCardProps } from '@/components/core/blog-card/BlogCard';
 
 const parsePageBodyOptions: ReplaceOptions = {
     tags: [WPTags.TitleWithRating, WPTags.FeatureBlogImage, WPTags.PageImage, WPTags.PostCard],
@@ -66,8 +66,9 @@ export default class PageService {
     }
 
     /**
-     * Component mapper that maps by replacing the HTML element with its component based on the options given
-     * this includes replacing a component with nothing, if it's meant not to be rendered
+     * Component mapper that maps by replacing the HTML element with its component
+     * this implementation is in charge of mapping WP HTML Elements to React Components
+     * currently, this is done by mapping through classnames as id's.
      * @param domNode 
      * @param accept - array of tags for elements meant to be transformed
      * @param htmlContent - html elements that are not meant to be transformed - usually includes text ie.strong, p, etc
@@ -75,24 +76,17 @@ export default class PageService {
      */
     mapComponents = (domNode: DOMNode, accept: WPTags[], htmlContent: boolean) => {
 
-        //TODO: Setup default page parser
-        //TODO: setup system that relies on on WP to setup templates + components for a page
-
         //check if node passed is an element
         if (isElement(domNode)) {
 
-            //element components with classNames, meant to be parsed differently
+            //Current implementation parses component based on classname as id
             let className = domNode.attribs.class;
-            let tag = domNode.tagName;
             let acceptString = accept.toString();
 
             if (className.includes(WPTags.PostCard)) {
-                if (acceptString.includes(WPTags.PostCard)) {
-                    const props = getBlogCardAttribs(domNode);
-                    return <BlogCard {...props} />
-                } else {
-                    return <></>
-                }
+                //get props first through handlers that can be unit tested, then pass to component
+                const BlogProps = replacePostCard(domNode);
+                return BlogProps ? <BlogCard {...BlogProps as BlogCardProps}/> : domNode;
             }
 
 
