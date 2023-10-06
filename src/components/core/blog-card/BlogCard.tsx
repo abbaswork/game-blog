@@ -3,7 +3,7 @@ import Image from 'next/image';
 import './blog-card.scss';
 import Link from 'next/link';
 
-interface Props {
+export interface BlogCardProps {
   src: string;
   alt: string;
   title: string;
@@ -12,21 +12,28 @@ interface Props {
   postCard?: true;
 }
 
-export const BlogCard = ({ src, alt, title, href, description, postCard = true }: Props) => {
+export const BlogCard = ({ src, alt, title, href, description, postCard = true }: BlogCardProps) => {
 
   //if the image or title is undefined, don't render component
   if (src === "" || title === "")
     return <></>;
 
+  //format description if keywords are there
   const blogDescription = () => {
-    if(postCard && description){
-      var splitPostIntro = description.split("Introduction");
-      var tags = splitPostIntro[0].replace("Metrics", "");
-      var intro = splitPostIntro[1].replace("[…]","...");
-      return(<><p>{tags}</p><br/><p>{intro}</p></>);
-    } else {
-      return <p>{description}</p>;
-    }
+
+    if (!postCard)
+      return <p>{description || ""}</p>
+
+    //if there is an introduction section, use it as the title and format, otherwise return the description
+    if (!description?.includes("Introduction"))
+      return <p>{description || ""}</p>
+
+    var splitPostIntro = description.split("Introduction");
+    var tags = splitPostIntro[0].replace("Metrics", "");
+    var intro = splitPostIntro[1].replace("[…]", "...");
+    return (<><p>{tags}</p><br /><p>{intro}</p></>);
+
+
   }
 
   return (
