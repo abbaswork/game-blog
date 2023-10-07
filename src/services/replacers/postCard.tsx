@@ -1,15 +1,16 @@
 import { BlogCard, BlogCardProps } from "@/components/core/blog-card/BlogCard";
+import { ReplaceProps } from "@/constants/replacers";
 import { Element } from "html-react-parser";
 
 type ElementText = Element & {
     data?: string;
 }
 
-export const replacePostCard = (domNode: Element): Boolean | BlogCardProps => {
+export const replacePostCard = (domNode: Element): ReplaceProps => {
 
     //check for mandatory fields in order to make a post card
     if (!(domNode.name === "li") || !(domNode.type === "tag"))
-        return false;
+        return { valid: false };
 
     //setup props
     var props: BlogCardProps = {
@@ -42,11 +43,10 @@ export const replacePostCard = (domNode: Element): Boolean | BlogCardProps => {
 
     (domNode.children as Element[]).forEach(recursiveFunction);
 
-    console.log("props: ", props);
-
     //check if all the required props are there for the blog card
     if (!props.src || !props.alt || !props.title || !props.href)
-        return false;
+        return { valid: false };
 
-    return props;
+
+    return { valid: true, compProps: props };
 }

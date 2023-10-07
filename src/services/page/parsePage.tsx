@@ -15,7 +15,6 @@ const parsePageBodyOptions: ReplaceOptions = {
     htmlContent: true
 }
 
-
 export default class PageService {
 
     //default page params
@@ -85,8 +84,8 @@ export default class PageService {
 
             if (className.includes(WPTags.PostCard)) {
                 //get props first through handlers that can be unit tested, then pass to component
-                const BlogProps = replacePostCard(domNode);
-                return BlogProps ? <BlogCard {...BlogProps as BlogCardProps}/> : domNode;
+                const {valid, compProps} = replacePostCard(domNode);
+                return valid ? <BlogCard {...compProps as BlogCardProps} /> : domNode;
             }
 
 
@@ -111,7 +110,8 @@ export default class PageService {
 
             //TODO: Switch for a switch statement
             if (className.includes(WPTags.TitleWithRating)) {
-                return replaceWithTitleWithRating(domNode);
+                const {valid, children, id} = replaceWithTitleWithRating(domNode);
+                return valid ? <h2 id={id}>{children}</h2> : domNode;
             }
 
             if (className.includes(WPTags.RatingList)) {

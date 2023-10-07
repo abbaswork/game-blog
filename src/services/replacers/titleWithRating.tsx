@@ -1,4 +1,5 @@
 import { RankLabel } from '@/components/core/rank-label/RankLabel';
+import { ReplaceProps } from '@/constants/replacers';
 import { Element, attributesToProps, domToReact } from 'html-react-parser';
 
 enum acceptedHeaderTags {
@@ -28,7 +29,7 @@ const headerComponents = (id: string, props: any, rank: any, children: any) => {
  * In the event where the number does not exist, return the original
  * @param domNode 
  */
-export const replaceWithTitleWithRating = (domNode: Element): JSX.Element | Element => {
+export const replaceWithTitleWithRating = (domNode: Element): ReplaceProps => {
 
     //setup parent vars
     var tag: acceptedHeaderTags;
@@ -39,7 +40,7 @@ export const replaceWithTitleWithRating = (domNode: Element): JSX.Element | Elem
 
     //check if valid dom Object, if not return dom
     if (!(Object.values(acceptedHeaderTags) as string[]).includes(domNode.name)) {
-        return domNode;
+        return { valid: false, compProps: undefined };
     } else {
         tag = acceptedHeaderTags[domNode.name as acceptedHeaderTags];
     }
@@ -48,8 +49,8 @@ export const replaceWithTitleWithRating = (domNode: Element): JSX.Element | Elem
     var compString = domToReact(domNode.children);
 
     //do not include support for a header tag with multiple elements to avoid user error
-    if (!(typeof compString === "string")){
-        return domNode;
+    if (!(typeof compString === "string")) {
+        return { valid: false };
     }
 
     //check if the last char is a number, if not return the normal header dom
@@ -63,14 +64,14 @@ export const replaceWithTitleWithRating = (domNode: Element): JSX.Element | Elem
         rankComponent = <RankLabel rank={Number(rankNumber)} />
 
     } else { //if not a number, return element
-        return domNode;
+        return { valid: false };
     }
 
 
     //create header components and parse attribs on parent component
     const props = attributesToProps(domNode.attribs);
     const id = (tokenString[0].toLowerCase()).replaceAll(" ", "-");
-    const headerObjs = headerComponents(id, { ...props }, rankComponent, tokenString[0]);
+    const children = <>{rankComponent}{tokenString[0]}</>;
 
-    return headerObjs[tag];
+    return { valid: true, id: id, children: children };
 }

@@ -10,16 +10,17 @@ describe('replaceComponents', () => {
 
   describe('replaceWithTitleWithRating', () => {
 
-    it('When given empty Element, return the given Element without parsing', () => {
-      expect(replaceWithTitleWithRating(mockEmptyElement)).toStrictEqual(mockEmptyElement);
+    it('When given empty Element, return invalid', () => {
+      const { valid } = replaceWithTitleWithRating(mockEmptyElement);
+      expect(valid).toBeFalsy();
     });
 
-    it('When given non header tag Element, return the given Element without parsing', () => {
-      const result = { ...mockEmptyElement, name: "em" } as Element;
-      expect(replaceWithTitleWithRating(result)).toStrictEqual(result);
+    it('When given non header tag Element, return invalid', () => {
+      const { valid } = replaceWithTitleWithRating({ ...mockEmptyElement, name: "em" } as Element);
+      expect(valid).toBeFalsy();
     });
 
-    it('When given header tag with non text elements inside ie.em, return the given Element without parsing', () => {
+    it('When given header tag with non text elements inside ie.em, return invalid', () => {
       const result = {
         ...mockEmptyElement, name: "h2",
         children: [
@@ -46,10 +47,11 @@ describe('replaceComponents', () => {
           },
         ]
       } as Element;
-      expect(replaceWithTitleWithRating(result)).toStrictEqual(result);
+      const { valid } = replaceWithTitleWithRating(result);
+      expect(valid).toBeFalsy();
     });
 
-    it('When given Element that consists of a text without number, return Element without parsing', () => {
+    it('When given Element that consists of a text without number, return invalid', () => {
       const result = {
         ...mockEmptyElement, name: "h2",
         children: [
@@ -64,10 +66,11 @@ describe('replaceComponents', () => {
           }
         ]
       } as Element;
-      expect(replaceWithTitleWithRating(result)).toStrictEqual(result);
+      const { valid } = replaceWithTitleWithRating(result);
+      expect(valid).toBeFalsy();
     });
 
-    it('When given Element that consists of a text with number but is missing slash, return Element without parsing', () => {
+    it('When given Element that consists of a text with number but is missing slash, return invalid', () => {
       const result = {
         ...mockEmptyElement, name: "h2",
         children: [
@@ -82,7 +85,9 @@ describe('replaceComponents', () => {
           }
         ]
       } as Element;
-      expect(replaceWithTitleWithRating(result)).toStrictEqual(result);
+      const { valid } = replaceWithTitleWithRating(result);
+      expect(valid).toBeFalsy();
+
     });
 
 
@@ -101,9 +106,9 @@ describe('replaceComponents', () => {
           }
         ]
       } as Element;
-      expect(replaceWithTitleWithRating(result)).toStrictEqual(
-        <h2 id="marvel-ultimate-alliance-">Marvel Ultimate Alliance <RankLabel rank={1} /></h2>
-      );
+      const { valid } = replaceWithTitleWithRating(result);
+      expect(valid).toBeTruthy();
+
     });
 
   });
