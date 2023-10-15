@@ -6,7 +6,7 @@ import { replaceGameTags } from './gameTag';
 
 describe('replaceComponents', () => {
 
-  describe('GameTag', () => {
+  describe('gameTag', () => {
 
     it('When given empty Element, return false', () => {
       const result = replaceGameTags(mockEmptyElement);

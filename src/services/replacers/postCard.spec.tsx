@@ -29,12 +29,12 @@ describe('replaceComponents', () => {
       const comp = {
         ...mockEmptyElement, name: "li", type: "tag", children: [
           { ...mockEmptyElement, type: "tag", name: "img", attribs: { src: "test", alt: "test" } },
-          { ...mockEmptyElement, type: "tag", name: "a", attribs: { href: "www.test.com" } },
+          { ...mockEmptyElement, type: "tag", name: "a", attribs: { href: "www.test.com/blog-1" } },
           { ...mockEmptyElement, parent: { ...mockEmptyElement, name: "a" }, data: "test" },
         ] as any
       } as Element;
       const result = replacePostCard(comp);
-      expect(result).toStrictEqual({valid: true, compProps: { src: 'test', title: 'test', alt: 'test', href: 'www.test.com' }});
+      expect(result).toStrictEqual({valid: true, compProps: { src: 'test', title: 'test', alt: 'test', href: '/blog-1' }});
     });
 
   });
