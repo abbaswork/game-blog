@@ -1,4 +1,5 @@
 import { BlogCardProps } from "@/components/core/blog-card/BlogCard";
+import { RatingIconsTypes } from "@/components/core/rating-icons/types";
 import { Element } from "html-react-parser";
 
 export type ElementText = Element & {
@@ -17,8 +18,9 @@ export type GameTagProps = {
 
 export type RatingListProps = {
     index: number;
-    icon: string,
-    rating: number
+    icon: RatingIconsTypes,
+    rating: number,
+    text: string
 }
 
 export type TitleWithRatingProps = {

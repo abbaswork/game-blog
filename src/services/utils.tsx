@@ -1,3 +1,4 @@
+import { RatingIconsTypes } from '@/components/core/rating-icons/types';
 import { ReplaceProps } from '@/constants/replacers';
 import { DOMNode, Element } from 'html-react-parser';
 
@@ -38,12 +39,14 @@ export const enum stringTags {
 }
 
 export const getStringProperties = (parseString: string, tags: stringTags[]): {
-    [stringTags.ICON]?: string
+    [stringTags.ICON]?: RatingIconsTypes,
     [stringTags.RATING]?: number,
     originalText: string
 } => {
 
-    //split the string using the split param
+    if (!parseString.includes("/"))
+        return { originalText: parseString };
+
     const tokens = parseString.split("/");
     var returnTags = {};
 
@@ -61,7 +64,6 @@ export const getStringProperties = (parseString: string, tags: stringTags[]): {
         })
     });
 
-    //console.log('return Tags: ', returnTags);
-    return {originalText: tokens[0], ...returnTags};
+    return { originalText: tokens[0], ...returnTags };
 
 }
