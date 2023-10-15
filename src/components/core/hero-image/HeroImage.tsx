@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 interface Props {
   src: string;
-  alt: string;
+  alt?: string;
 }
 
 export const HeroImage = ({src, alt = ""}: Props) => {

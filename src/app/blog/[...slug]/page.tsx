@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
-import BlogPageService from "@/services/page/blog/blogPage";
 import { Page } from "@/types";
 import { wpPreviewHeaders } from '@/config/api';
 import { draftMode } from 'next/headers';
-import { useSearchParams } from 'next/navigation';
+import PageService from '@/services/page/parsePage';
 
 
 /**
@@ -34,7 +33,7 @@ export async function generateStaticParams() {
 
 
 //get blog data fetch
-async function getPost(slug: string[]): Promise<BlogPageService> {
+async function getPost(slug: string[]): Promise<PageService> {
 
   //check draft mode and get params, draft mode can ONLY by enabled through draft endpoint auth
   const { isEnabled } = draftMode();
@@ -50,7 +49,7 @@ async function getPost(slug: string[]): Promise<BlogPageService> {
 
   //console.log('posts Fetch: ', postsFetch);
 
-  const postRender = new BlogPageService(postsFetch[0] ? postsFetch[0] : postsFetch as any);
+  const postRender = new PageService(postsFetch[0] ? postsFetch[0] : postsFetch as any);
   return postRender;
 }
 

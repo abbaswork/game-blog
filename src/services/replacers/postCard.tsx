@@ -1,9 +1,11 @@
-import { BlogCard, BlogCardProps } from "@/components/core/blog-card/BlogCard";
-import { ReplaceProps } from "@/constants/replacers";
+import { BlogCardProps } from "@/components/core/blog-card/BlogCard";
+import { ReplaceProps, ElementText } from "@/constants/replacers";
 import { Element } from "html-react-parser";
 
-type ElementText = Element & {
-    data?: string;
+//replace any absolute urls from wp, into relative urls for next
+const buildRelativeURL = (src: string): string => {
+    const tokens = src.split(".com");
+    return (tokens ? tokens[1] : "");
 }
 
 export const replacePostCard = (domNode: Element): ReplaceProps => {
@@ -30,7 +32,7 @@ export const replacePostCard = (domNode: Element): ReplaceProps => {
         }
 
         if (child.name === "a")
-            props.href = child.attribs.href || "";
+            props.href = buildRelativeURL(child.attribs.href) || "";
 
         if (!child.name && child.parent && (child.parent as Element).name === "p")
             props.description = (child as ElementText).data || "";

@@ -1,14 +1,13 @@
-import { mockEmptyElement } from '@/types/testTypes';
+import { mockEmptyElement, mockOnlyText } from '@/types/testTypes';
 import { Element } from 'html-react-parser';
 import {
   replaceWithTitleWithRating
 } from './titleWithRating';
 import '@testing-library/jest-dom';
-import { RankLabel } from '@/components/core/rank-label/RankLabel';
 
 describe('replaceComponents', () => {
 
-  describe('replaceWithTitleWithRating', () => {
+  describe('titleWithRating', () => {
 
     it('When given empty Element, return invalid', () => {
       const { valid } = replaceWithTitleWithRating(mockEmptyElement);
@@ -24,25 +23,16 @@ describe('replaceComponents', () => {
       const result = {
         ...mockEmptyElement, name: "h2",
         children: [
-          Element as any, {
-            parent: null,
-            prev: null,
-            next: null,
-            startIndex: null,
-            endIndex: null,
+          {
+            ...mockEmptyElement,
             children: [
-              Text as any, {
-                parent: null,
-                prev: null,
-                next: null,
-                startIndex: null,
-                endIndex: null,
+              {
+                parent: mockEmptyElement,
                 data: 'Marvel Ultimate Alliance',
                 type: 'text'
               }
             ],
             name: 'em',
-            attribs: {},
             type: 'tag'
           },
         ]
@@ -51,63 +41,32 @@ describe('replaceComponents', () => {
       expect(valid).toBeFalsy();
     });
 
-    it('When given Element that consists of a text without number, return invalid', () => {
+    it('When given Element that consists of text, with no /rating, set default to 0', () => {
       const result = {
         ...mockEmptyElement, name: "h2",
         children: [
-          Text as any, {
-            parent: null,
-            prev: null,
-            next: null,
-            startIndex: null,
-            endIndex: null,
+          {
+            ...mockOnlyText,
             data: 'Marvel Ultimate Alliance',
-            type: 'text'
-          }
+          } as any
         ]
       } as Element;
-      const { valid } = replaceWithTitleWithRating(result);
-      expect(valid).toBeFalsy();
+      const { compProps } = replaceWithTitleWithRating(result);
+      expect(compProps).toStrictEqual({ text: 'Marvel Ultimate Alliance', rank: 0 });
     });
 
-    it('When given Element that consists of a text with number but is missing slash, return invalid', () => {
+    it('When given Element that consists of text and /rating, parse properties correctly', () => {
+
       const result = {
         ...mockEmptyElement, name: "h2",
         children: [
-          {
-            parent: null,
-            prev: null,
-            next: null,
-            startIndex: null,
-            endIndex: null,
-            data: 'Marvel Ultimate Alliance 1',
-            type: 'text'
-          }
-        ]
+          { ...mockOnlyText, data: 'Marvel Ultimate Alliance /rating:1', }
+        ] as any
       } as Element;
-      const { valid } = replaceWithTitleWithRating(result);
-      expect(valid).toBeFalsy();
+      const { valid, compProps } = replaceWithTitleWithRating(result);
 
-    });
-
-
-    it('When given Element that consists of a text with number but is missing slash, return Element without parsing', () => {
-      const result = {
-        ...mockEmptyElement, name: "h2",
-        children: [
-          {
-            parent: null,
-            prev: null,
-            next: null,
-            startIndex: null,
-            endIndex: null,
-            data: 'Marvel Ultimate Alliance /1',
-            type: 'text'
-          }
-        ]
-      } as Element;
-      const { valid } = replaceWithTitleWithRating(result);
       expect(valid).toBeTruthy();
+      expect(compProps).toStrictEqual({ text: 'Marvel Ultimate Alliance ', rank: '1' });
 
     });
 

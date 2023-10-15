@@ -1,19 +1,19 @@
-import { Page, Meta, ParsedContent, ReplaceOptions } from '@/types';
-import parse, { DOMNode, attributesToProps, domToReact } from 'html-react-parser';
+import { Page, Meta, ParsedContent } from '@/types';
+import parse, { DOMNode } from 'html-react-parser';
 import { getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
 import { GameTag } from '@/components/core/game-tag/GameTag';
-import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
-import { RatingIconsTypes } from '@/components/core/rating-icons/types';
 import { replaceWithTitleWithRating } from '../replacers/titleWithRating';
-import { WPTags } from '@/constants';
+import { WPPropertyTags, WPTags } from '@/constants';
 import { replacePostCard } from '../replacers/postCard';
 import { BlogCard, BlogCardProps } from '@/components/core/blog-card/BlogCard';
-
-const parsePageBodyOptions: ReplaceOptions = {
-    tags: [WPTags.TitleWithRating, WPTags.FeatureBlogImage, WPTags.PageImage, WPTags.PostCard],
-    htmlContent: true
-}
+import { GameTagProps, ImgProps, TitleWithRatingProps } from '@/constants/replacers';
+import { replaceGameTags } from '../replacers/gameTag';
+import { replaceRatingList } from '../replacers/ratingList';
+import { RankLabel } from '@/components/core/rank-label/RankLabel';
+import { ListContainer } from '@/components/core/list-container/ListContainer';
+import { Icons } from '@/components/core/icons/Icon';
+import { medalArray } from '@/components/core/icons/types';
 
 export default class PageService {
 
@@ -21,16 +21,20 @@ export default class PageService {
     post: Page;
     content: ParsedContent;
     meta: Meta;
+    featuredImage: ParsedContent | undefined;
+    tableOfContents: React.JSX.Element;
 
     /**
      * Initialise and parse default params
      * @param post 
      * @param parseContentOptions - useful for specific pages and classes that extend page
      */
-    constructor(post: Page, parseContentOptions: ReplaceOptions = parsePageBodyOptions) {
+    constructor(post: Page) {
+        const parseContent = this.parseContent(post.content.rendered);
         this.post = post;
-        this.content = this.parseContent(post.content.rendered, parseContentOptions);
+        this.content = parseContent;
         this.meta = this.parseMeta(post);
+        this.tableOfContents = this.parseTOC(parseContent);
     }
 
     //parse meta properties from wp pages
@@ -47,7 +51,7 @@ export default class PageService {
      * @param content 
      * @returns 
      */
-    parseContent = (content: string, options: ReplaceOptions): ParsedContent => {
+    parseContent = (content: string): ParsedContent => {
 
         if (!content) //if empty string, don't parse
             return [];
@@ -55,7 +59,7 @@ export default class PageService {
         try { //filter out any new lines and parse html string into components
             const filterLines = content.replaceAll('\n', '');
             const parsedContent = parse(filterLines, {
-                replace: (domNode: DOMNode) => this.mapComponents(domNode, options.tags, options.htmlContent)
+                replace: (domNode: DOMNode) => this.mapComponents(domNode)
             });
             return parsedContent;
         } catch (e) {
@@ -73,126 +77,102 @@ export default class PageService {
      * @param htmlContent - html elements that are not meant to be transformed - usually includes text ie.strong, p, etc
      * @returns 
      */
-    mapComponents = (domNode: DOMNode, accept: WPTags[], htmlContent: boolean) => {
+    mapComponents = (domNode: DOMNode) => {
 
         //check if node passed is an element
         if (isElement(domNode)) {
 
             //Current implementation parses component based on classname as id
             let className = domNode.attribs.class;
-            let acceptString = accept.toString();
 
+            //Set Page Properties by checking page property tags
+            if (className === WPPropertyTags.FeatureBlogImage) {
+                const { valid, compProps } = getImgAttribs(domNode.children[0]);
+                this.featuredImage = valid ? <HeroImage {...compProps as ImgProps} /> : undefined;
+                return <></>;
+            }
+
+            //set Page Components by checking the WP Tags
             if (className.includes(WPTags.PostCard)) {
                 //get props first through handlers that can be unit tested, then pass to component
-                const {valid, compProps} = replacePostCard(domNode);
+                const { valid, compProps } = replacePostCard(domNode);
                 return valid ? <BlogCard {...compProps as BlogCardProps} /> : domNode;
             }
 
-
-            //if this specific component is being parsed, then parse it, if it's not included in options, return nothing
-            if (className === WPTags.FeatureBlogImage) {
-                if (acceptString.includes(WPTags.FeatureBlogImage)) {
-                    const props = getImgAttribs(domNode.children[0]);
-                    return <HeroImage {...props} />
-                } else {
-                    return <></>
-                }
-            }
-
             if (className.includes(WPTags.PageImage)) {
-                if (acceptString.includes(WPTags.PageImage)) {
-                    const props = getImgAttribs(domNode.children[0]);
-                    return <HeroImage {...props} />
-                } else {
-                    return <></>;
-                }
+                const { valid, compProps } = getImgAttribs(domNode.children[0]);
+                return valid ? <HeroImage {...compProps as ImgProps} /> : domNode;
             }
 
-            //TODO: Switch for a switch statement
             if (className.includes(WPTags.TitleWithRating)) {
-                const {valid, children, id} = replaceWithTitleWithRating(domNode);
-                return valid ? <h2 id={id}>{children}</h2> : domNode;
+                const { valid, id, compProps } = replaceWithTitleWithRating(domNode);
+                return valid ? <h2 id={id}><RankLabel rank={Number((compProps as TitleWithRatingProps).rank)} /></h2> : domNode;
             }
 
             if (className.includes(WPTags.RatingList)) {
-                if (acceptString.includes(WPTags.RatingList)) {
+                //parse list of game tags
+                const { valid, compProps } = replaceRatingList(domNode);
 
-                    //array of list items to render
-                    var listItems: JSX.Element[] = [];
-                    const children = domNode.children;
-
-                    //for each child extract text items and render in list item
-                    children.map((listItem) => {
-                        const listItemNode = (listItem as any).children as DOMNode[];
-                        var listText = domToReact(listItemNode);
-                        var lastText: string = "";
-                        var index = 0;
-                        var rating = "";
-                        var icon: RatingIconsTypes = RatingIconsTypes.swords;
-
-                        //if the text is a string vs array of strings
-                        if ((typeof listText) === "string") {
-                            //get rating from string
-                            lastText = listText as string;
-                            rating = lastText[lastText.length - 1];
-
-                            //replace list text string
-                            listText = lastText.replace(rating, "");
-                        } else {
-                            //get rating from last string in array
-                            var anyText = listText as any;
-                            index = anyText.length - 1;
-                            lastText = anyText[index];
-                            var rating = lastText.replace(/\D/g, '');
-
-                            if (anyText[0] && anyText[0].props && anyText[0].props.children.includes("Players")) {
-                                icon = RatingIconsTypes.gamepad;
-                            }
-
-                            //replace number in last string
-                            lastText.replace(rating, "");
-                            anyText[index] = lastText.replace(rating, "");
-                            listText = anyText;
-                        }
-
-                        listItems.push(<li className='rating-item'><span>{listText}</span><RatingIcons rank={Number(rating)} icon={icon} /></li>);
-
+                if (valid) { //if valid return list items in game tags
+                    const gameTags = (compProps as GameTagProps[]).map(tag => {
+                        return <li key={tag.index}><GameTag>{tag.text}</GameTag></li>
                     });
-
-                    return (
-                        <ul className='rating-list'>
-                            {listItems}
-                        </ul>
-                    );
-                } else {
-                    return <></>
+                    return <ul className='horizontal-list'>{gameTags}</ul>
                 }
+
+                //else just return the original obj
+                return domNode;
             }
 
             if (className.includes(WPTags.GameTags)) {
-                if (acceptString.includes(WPTags.GameTags)) {
 
-                    var listItems: JSX.Element[] = [];
-                    const children = domNode.children;
+                //parse list of game tags
+                const { valid, compProps } = replaceGameTags(domNode);
 
-                    children.map((listItem) => {
-                        if ((listItem as any).children[0]) {
-                            const text = (listItem as any).children[0].data as string;
-                            listItems.push(<li><GameTag>{text}</GameTag></li>);
-                        }
+                if (valid) { //if valid return list items in game tags
+                    const gameTags = (compProps as GameTagProps[]).map(tag => {
+                        return <li key={tag.index}><GameTag>{tag.text}</GameTag></li>
                     });
-
-                    return (<ul className='horizontal-list'>{listItems}</ul>)
-                        ;
-                } else {
-                    return <></>
+                    return <ul className='horizontal-list'>{gameTags}</ul>
                 }
+
+                //else just return the original obj
+                return domNode;
             }
         }
+    }
 
-        //if not returning html content, dont return text or element type components
-        if (htmlContent === false) {
+
+    /**
+     * After content has been parsed, filter through h2 components to create table of contents
+     * @param content 
+     * @returns 
+     */
+    parseTOC = (content: ParsedContent): React.JSX.Element => {
+
+        const tableOfContents: React.JSX.Element[] = [];
+
+        //if empty contents are passed
+        if (content === "" || (content as React.JSX.Element[]).length === 0)
             return <></>;
-        }
+
+        //otherwise generate list items based on headers
+        var tocIndex = 0;
+        (content as React.JSX.Element[]).map((element: React.JSX.Element, index) => {
+            if (element.type === 'h2') {
+                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : (<span style={{ paddingLeft: "0.5rem" }}>{tocIndex + 1 + ". "}</span>)}{element.props.children[0]}</a></li>);
+                tocIndex++;
+            }
+        });
+
+        //if no headers are found to link in toc, then return fragment
+        if (tableOfContents.length === 0)
+            return <></>
+
+        return (
+            <ListContainer title={"Table Of Contents"}>
+                {tableOfContents}
+            </ListContainer>
+        );
     }
 }

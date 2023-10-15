@@ -23,6 +23,13 @@ export const mockEmptyElement: Element = {
     cloneNode: undefined as any
 };
 
+export const mockOnlyText = {
+    ...mockEmptyElement,
+    name: null,
+    parent: { ...mockEmptyElement, name: "li", type: "tag" },
+    data: "testing"
+}
+
 export const mockHeaderTag: Element = {
     ...mockEmptyElement, name: "h2", type: "tag",
     children: [
@@ -47,7 +54,7 @@ export const mockImgTag: Element = {
             name: "a",
             type: "tag",
             children: [
-                
+
             ]
         }
     ]
