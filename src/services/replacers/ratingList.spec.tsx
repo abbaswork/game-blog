@@ -13,14 +13,14 @@ describe('replaceComponents', () => {
       expect(result.valid).toBeFalsy();
     });
 
-    it('When given list item without icon type and rating type, return defaults', () => {
+    it('When given list item without icon type and rating type, return empty props', () => {
       const comp = {
         ...mockEmptyElement, name: "ul", type: "tag", children: [
           { ...mockOnlyText}
         ] as any
       } as Element;
       const result = replaceRatingList(comp);
-      expect(result).toStrictEqual({ valid: true, compProps: [ { index: 0, icon: 'swords', rating: 0 } ] });
+      expect(result).toStrictEqual({ valid: true, compProps: [ { index: 0, icon: 'swords', rating: 0, text: "testing" } ] });
     });
 
     it('When given list items that contain valid icon and rating, parse correctly', () => {
@@ -30,7 +30,7 @@ describe('replaceComponents', () => {
         ] as any
       } as Element;
       const result = replaceRatingList(comp);
-      expect(result).toStrictEqual({ valid: true, compProps: [ { index: 0, icon: 'gamepad', rating: 5 } ] });
+      expect(result).toStrictEqual({ valid: true, compProps: [ { index: 0, icon: 'gamepad', rating: 5, text: "story " } ] });
     });
 
   });

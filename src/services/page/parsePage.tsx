@@ -7,13 +7,14 @@ import { replaceWithTitleWithRating } from '../replacers/titleWithRating';
 import { WPPropertyTags, WPTags } from '@/constants';
 import { replacePostCard } from '../replacers/postCard';
 import { BlogCard, BlogCardProps } from '@/components/core/blog-card/BlogCard';
-import { GameTagProps, ImgProps, TitleWithRatingProps } from '@/constants/replacers';
+import { GameTagProps, ImgProps, RatingListProps, TitleWithRatingProps } from '@/constants/replacers';
 import { replaceGameTags } from '../replacers/gameTag';
 import { replaceRatingList } from '../replacers/ratingList';
 import { RankLabel } from '@/components/core/rank-label/RankLabel';
 import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Icons } from '@/components/core/icons/Icon';
 import { medalArray } from '@/components/core/icons/types';
+import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
 
 export default class PageService {
 
@@ -106,18 +107,27 @@ export default class PageService {
 
             if (className.includes(WPTags.TitleWithRating)) {
                 const { valid, id, compProps } = replaceWithTitleWithRating(domNode);
-                return valid ? <h2 id={id}><RankLabel rank={Number((compProps as TitleWithRatingProps).rank)} /></h2> : domNode;
+                return valid ?
+                    <h2 id={id}>
+                        {(compProps as TitleWithRatingProps).text}
+                        <RankLabel rank={Number((compProps as TitleWithRatingProps).rank)} />
+                    </h2>
+                    : domNode;
             }
 
             if (className.includes(WPTags.RatingList)) {
                 //parse list of game tags
                 const { valid, compProps } = replaceRatingList(domNode);
+                console.log('compProps: ', compProps);
 
                 if (valid) { //if valid return list items in game tags
-                    const gameTags = (compProps as GameTagProps[]).map(tag => {
-                        return <li key={tag.index}><GameTag>{tag.text}</GameTag></li>
+                    const gameTags = (compProps as RatingListProps[]).map(tag => {
+                        return <li className='rating-item' key={tag.index}>
+                            <span>{tag.text}</span>
+                            <RatingIcons rank={tag.rating} icon={tag.icon} />
+                        </li>
                     });
-                    return <ul className='horizontal-list'>{gameTags}</ul>
+                    return <ul className='rating-list'>{gameTags}</ul>
                 }
 
                 //else just return the original obj

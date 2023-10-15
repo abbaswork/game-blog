@@ -14,13 +14,12 @@ export const replaceRatingList = (domNode: Element): ReplaceProps => {
     //recursive function that maps all text properties into gametag list items
     const recursiveFunction = (child: Element) => {
 
-        //parse text inside list
         if (!child.name && child.parent) {
             //extract properties from string, for icon and rating
             const properties = {...getStringProperties((child as ElementText).data, [stringTags.ICON, stringTags.RATING])};
 
             //set default values for component
-            listItems.push({ index: indexCounter, icon: properties.icon || RatingIconsTypes.swords, rating: Number(properties.rating) || 0});
+            listItems.push({ index: indexCounter, text: properties.originalText, icon: properties.icon || RatingIconsTypes.swords, rating: Number(properties.rating) || 0});
             indexCounter++;
         }
 
