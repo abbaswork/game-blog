@@ -1,3 +1,5 @@
+import { RatingIconsTypes } from '@/components/core/rating-icons/types';
+import { ReplaceProps } from '@/constants/replacers';
 import { DOMNode, Element } from 'html-react-parser';
 
 // the workaround: https://github.com/remarkablemark/html-react-parser/issues/616
@@ -10,65 +12,58 @@ export const isElement = (domNode: DOMNode): domNode is Element => {
     return isTag && hasClass;
 };
 
-/**
- * classes that represent elements that have components meant to replace them
- */
-export enum WPTags {
-    FeatureBlogImage = "wp-block-post-featured-image",
-    PageImage = "wp-block-image",
-    Heading = "wp-block-heading",
-    PostCard = "post type-post status-publish",
-    RatingList = "rating-list",
-    GameTags = "game-tags"
-}
 
 /**
  * Simple util that extracts img properties from a node
  * @param domNode 
  * @returns 
  */
-export const getImgAttribs = (domNode: DOMNode) => {
+export const getImgAttribs = (domNode: DOMNode): ReplaceProps => {
+
+    //check if img attribs are present
+    if (!(domNode as Element).attribs.src)
+        return { valid: false };
+
     return {
-        src: (domNode as Element).attribs.src || "",
-        alt: (domNode as Element).attribs.alt || "",
-    }
-}
-
-/**
- * Simple util that extracts img properties from a node
- * @param domNode 
- * @returns 
- */
-export const getBlogCardAttribs = (domNode: DOMNode) => {
-    if (isElement(domNode)) {
-        const container = domNode.children[0];
-
-        const imgContainer = domNode.children[1];
-        const imgLink = (imgContainer as Element).children[0];
-        const img = (imgLink as Element).children[0];
-
-        const titleLink = (container as Element).children[0];
-        const title = (titleLink as Element).children[0];
-
-        const pContainer = domNode.children[2];
-        const paragraph = (pContainer as Element).children[0];
-        const pText = paragraph ? (paragraph as Element).children[0] : "";
-
-        return {
-            src: (img as Element).attribs ? (img as Element).attribs.src : "",
-            alt: (img as Element).attribs ? (img as Element).attribs.alt : "",
-            title: (title as any).data,
-            href: `/blog/${((title as any).data + "").replaceAll(" ", "-").toLocaleLowerCase()}`,
-            description: pText ? (pText as any).data : "",
+        valid: true,
+        compProps: {
+            src: (domNode as Element).attribs.src,
+            alt: (domNode as Element).attribs.alt || "",
         }
-
     }
+}
 
-    return {
-        src: "",
-        alt: "",
-        title: "",
-        href: "",
-        description: "",
-    }
+export const enum stringTags {
+    ICON = "icon",
+    RATING = "rating"
+}
+
+export const getStringProperties = (parseString: string, tags: stringTags[]): {
+    [stringTags.ICON]?: RatingIconsTypes,
+    [stringTags.RATING]?: number,
+    originalText: string
+} => {
+
+    if (!parseString.includes("/"))
+        return { originalText: parseString };
+
+    const tokens = parseString.split("/");
+    var returnTags = {};
+
+    tokens.map(token => {
+
+        //map through tags until token is found to include tag
+        tags.map(tag => {
+
+            if (token.toLowerCase().includes(tag)) {
+                //split the token using : and assign to return
+                const param = token.split(":");
+                returnTags = { ...returnTags, [tag]: param[1] };
+            }
+
+        })
+    });
+
+    return { originalText: tokens[0], ...returnTags };
+
 }

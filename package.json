@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "rm -rd -f .next && next dev",
     "build": "next build",
     "test": "jest --watch",
     "start": "next start",
