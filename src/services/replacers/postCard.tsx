@@ -8,6 +8,13 @@ const buildRelativeURL = (src: string): string => {
     return (tokens ? tokens[1] : "");
 }
 
+//transform url to match blog permalink structure
+const transformTitleUrl = (title: string): string => {
+    var url = title.toLowerCase();
+    url = url.replaceAll(" ", "-");
+    return ("/blog/" + url);
+}
+
 export const replacePostCard = (domNode: Element): ReplaceProps => {
 
     //check for mandatory fields in order to make a post card
@@ -31,14 +38,16 @@ export const replacePostCard = (domNode: Element): ReplaceProps => {
             props.alt = child.attribs.alt || "";
         }
 
-        if (child.name === "a")
-            props.href = buildRelativeURL(child.attribs.href) || "";
+       // if (child.name === "a")
+            //props.href = buildRelativeURL(child.attribs.href) || "";
 
         if (!child.name && child.parent && (child.parent as Element).name === "p")
             props.description = (child as ElementText).data || "";
 
-        if (!child.name && child.parent && (child.parent as Element).name === "a")
+        if (!child.name && child.parent && (child.parent as Element).name === "a"){
             props.title = (child as ElementText).data || "";
+            props.href = transformTitleUrl(props.title);
+        }
 
         child.children && (child.children as Element[]).forEach(recursiveFunction);
     }
