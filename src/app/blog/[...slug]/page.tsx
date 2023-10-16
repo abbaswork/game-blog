@@ -11,14 +11,6 @@ import PageService from '@/services/page/parsePage';
  */
 export async function generateStaticParams() {
 
-  // // When this is true (in preview environments) don't prerender any static pages, (faster builds, but slower initial page load)
-  // if (process.env.SKIP_BUILD_STATIC_GENERATION) {
-  //   return {
-  //     paths: [],
-  //     fallback: 'blocking',
-  //   }
-  // }
-
   // Call an external API endpoint to get posts
   const postsFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts`, {
     headers: wpPreviewHeaders
@@ -46,8 +38,6 @@ async function getPost(slug: string[]): Promise<PageService> {
   const postsFetch: Page[] = await fetch(`${baseURL}${searchURL}`, {
     headers: wpPreviewHeaders
   }).then((res) => res.json());
-
-  //console.log('posts Fetch: ', postsFetch);
 
   const postRender = new PageService(postsFetch[0] ? postsFetch[0] : postsFetch as any);
   return postRender;

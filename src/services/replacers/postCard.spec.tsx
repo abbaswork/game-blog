@@ -34,7 +34,7 @@ describe('replaceComponents', () => {
         ] as any
       } as Element;
       const result = replacePostCard(comp);
-      expect(result).toStrictEqual({valid: true, compProps: { src: 'test', title: 'test', alt: 'test', href: '/blog-1' }});
+      expect(result).toStrictEqual({valid: true, compProps: { src: 'test', title: 'test', alt: 'test', href: '/blog/test' }});
     });
 
   });
