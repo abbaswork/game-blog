@@ -26,8 +26,8 @@ export const NavLinks = ({ menuItems }: MenuProps) => {
 
   //parse menu from menu links
   const menu = (menuLinks: menuLinkProps[]) => {
-    return menuLinks.map(menu => {
-      return (<Link onClick={() => setshowMobileOverlay(false)} href={menu.href}>{menu.text}</Link>);
+    return menuLinks.map((menu, index) => {
+      return (<Link key={index + 1} onClick={() => setshowMobileOverlay(false)} href={menu.href}>{menu.text}</Link>);
     })
   }
 
@@ -45,7 +45,7 @@ export const NavLinks = ({ menuItems }: MenuProps) => {
       {/* container that renders links as inline or in an overlay based on device */}
       <div className='navlink-container' ref={overlayRef}>
         <div className='mobile-links'>
-          <Link onClick={() => setshowMobileOverlay(false)} href="/">Home</Link>
+          <Link key={0} onClick={() => setshowMobileOverlay(false)} href="/">Home</Link>
           {menuItems && menu(menuItems)}
         </div>
       </div>
