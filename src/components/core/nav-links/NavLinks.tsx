@@ -5,10 +5,16 @@ import './nav-links.scss';
 import { useRef } from "react"
 import { useOutsideRefClick } from './../../util/util';
 import Link from 'next/link';
+import { menuLinkProps } from '@/services/navigation/types';
 
 //client component given the link behaviour
 
-export const NavLinks = () => {
+type MenuProps = {
+  menuItems: menuLinkProps[]
+}
+
+
+export const NavLinks = ({ menuItems }: MenuProps) => {
 
   //button that opens mobile overlay
   const [showMobileOverlay, setshowMobileOverlay] = React.useState<boolean>(false);
@@ -17,6 +23,13 @@ export const NavLinks = () => {
   const overlayRef = useRef(null);
 
   useOutsideRefClick(overlayRef, () => setshowMobileOverlay(false));
+
+  //parse menu from menu links
+  const menu = (menuLinks: menuLinkProps[]) => {
+    return menuLinks.map(menu => {
+      return (<Link onClick={() => setshowMobileOverlay(false)} href={menu.href}>{menu.text}</Link>);
+    })
+  }
 
   return (
     <div className={(showMobileOverlay ? " mobile-overlay" : "")}>
@@ -33,6 +46,7 @@ export const NavLinks = () => {
       <div className='navlink-container' ref={overlayRef}>
         <div className='mobile-links'>
           <Link onClick={() => setshowMobileOverlay(false)} href="/">Home</Link>
+          {menuItems && menu(menuItems)}
         </div>
       </div>
     </div>
