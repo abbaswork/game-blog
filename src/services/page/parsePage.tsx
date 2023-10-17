@@ -118,7 +118,6 @@ export default class PageService {
             if (className.includes(WPTags.RatingList)) {
                 //parse list of game tags
                 const { valid, compProps } = replaceRatingList(domNode);
-                console.log('compProps: ', compProps);
 
                 if (valid) { //if valid return list items in game tags
                     const gameTags = (compProps as RatingListProps[]).map(tag => {
