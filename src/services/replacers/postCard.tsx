@@ -1,6 +1,7 @@
 import { BlogCardProps } from "@/components/core/blog-card/BlogCard";
 import { ReplaceProps, ElementText } from "@/constants/replacers";
 import { Element } from "html-react-parser";
+import { transformTitleUrl } from "../utils";
 
 //replace any absolute urls from wp, into relative urls for next
 const buildRelativeURL = (src: string): string => {
@@ -8,12 +9,7 @@ const buildRelativeURL = (src: string): string => {
     return (tokens ? tokens[1] : "");
 }
 
-//transform url to match blog permalink structure
-const transformTitleUrl = (title: string): string => {
-    var url = title.toLowerCase();
-    url = url.replaceAll(" ", "-");
-    return ("/blog/" + url);
-}
+
 
 export const replacePostCard = (domNode: Element): ReplaceProps => {
 

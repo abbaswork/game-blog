@@ -1,4 +1,4 @@
-import { mockEmptyElement, mockOnlyText } from '@/types/testTypes';
+import { mockEmptyElement, mockOnlyText } from '@/constants/tests';
 import { Element } from 'html-react-parser';
 import {
   replaceWithTitleWithRating

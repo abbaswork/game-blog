@@ -1,4 +1,6 @@
-import { Page } from ".";
+import { menuItem } from "@/services/navigation/types";
+import { Page } from "@/types";
+
 import { Element } from 'html-react-parser';
 
 export const mockEmptyElement: Element = {
@@ -283,3 +285,68 @@ export const emptyPost: Page = {
         ]
     }
 }
+
+export const mockMenuItems: menuItem[] = [{
+    "id": 179,
+    "title": {
+        "rendered": "Test Page"
+    },
+    "status": "publish",
+    "url": "https:www.metricgamer.com/draft?id=&secret=QvcUlC6vzRWYTPmovA21svFRE3dlx6Tx",
+    "attr_title": "",
+    "description": "",
+    "type": "post_type",
+    "type_label": "Page",
+    "object": "page",
+    "object_id": 8,
+    "parent": 0,
+    "menu_order": 1,
+    "target": "",
+    "classes": [
+        ""
+    ],
+    "xfn": [
+        ""
+    ],
+    "invalid": false,
+    "meta": [],
+    "menus": 3,
+    "_links": {
+        "self": [
+            {
+                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/menu-items/179"
+            }
+        ],
+        "collection": [
+            {
+                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/menu-items"
+            }
+        ],
+        "about": [
+            {
+                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/types/nav_menu_item"
+            }
+        ],
+        "wp:term": [
+            {
+                "taxonomy": "nav_menu",
+                "embeddable": true,
+                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/menus?post=179"
+            }
+        ],
+        "wp:menu-item-object": [
+            {
+                "post_type": "page",
+                "embeddable": true,
+                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/pages/8"
+            }
+        ],
+        "curies": [
+            {
+                "name": "wp",
+                "href": "https://api.w.org/{rel}",
+                "templated": true
+            }
+        ]
+    }
+  }]

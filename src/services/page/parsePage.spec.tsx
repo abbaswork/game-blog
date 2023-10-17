@@ -1,4 +1,4 @@
-import { emptyPost, testPost } from '@/types/testTypes';
+import { emptyPost, testPost } from '@/constants/tests';
 import PageService from './parsePage';
 import '@testing-library/jest-dom';
 

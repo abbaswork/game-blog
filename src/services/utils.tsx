@@ -67,3 +67,10 @@ export const getStringProperties = (parseString: string, tags: stringTags[]): {
     return { originalText: tokens[0], ...returnTags };
 
 }
+
+//transform url to match blog permalink structure
+export const transformTitleUrl = (title: string, suffix: string = "/blog/"): string => {
+    var url = title.toLowerCase();
+    url = url.replaceAll(" ", "-");
+    return (suffix + url);
+}

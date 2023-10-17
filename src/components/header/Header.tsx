@@ -5,6 +5,7 @@ import { Searchbar } from '../core/searchbar/Searchbar';
 import LogoImg from "./../assets/logo-transparent.svg";
 import Image from 'next/image';
 import Link from 'next/link';
+import { menuLinkProps } from '@/services/navigation/types';
 
 const Logo = () => (
   <Link href="/">
@@ -12,15 +13,19 @@ const Logo = () => (
   </Link>
 );
 
-export const Header = () => (
+type HeaderProps = {
+  menuItems?: menuLinkProps[]
+}
+
+export const Header = ({ menuItems }: HeaderProps) => (
   <header className="header-container nav-layout">
     {/* Renders 3 sections into the header */}
     <div className='nav-link-layout'>
-      <NavLinks />
+      <NavLinks menuItems={menuItems || []} />
       <Logo />
     </div>
 
-      <Searchbar />
+    <Searchbar />
 
   </header>
 );
