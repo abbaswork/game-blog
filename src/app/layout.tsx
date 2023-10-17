@@ -78,7 +78,7 @@ export default async function RootLayout({
                 <li>New Blogs Coming Soon</li>
               </>
             </ListContainer>
-            <ins className="adsbygoogle"
+            {/* <ins className="adsbygoogle"
               style={{ display: "block" }}
               data-ad-client="ca-pub-6729388944848700"
               data-ad-slot="8400791358"
@@ -88,7 +88,7 @@ export default async function RootLayout({
               {`
               (adsbygoogle = window.adsbygoogle || []).push({ });
               `}
-            </Script>
+            </Script> */}
           </SidePanel>
 
         </div>
