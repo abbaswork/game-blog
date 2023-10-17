@@ -1,4 +1,4 @@
-import { mockEmptyElement } from '@/types/testTypes';
+import { mockEmptyElement } from '@/constants/tests';
 import { Element } from 'html-react-parser';
 import '@testing-library/jest-dom';
 import { replacePostCard } from './postCard';
