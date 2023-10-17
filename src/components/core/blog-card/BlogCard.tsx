@@ -47,6 +47,7 @@ export const BlogCard = ({ src, alt, title, href, description, postCard = true }
           height={0}
           sizes="100vw"
           style={{ width: '100%', height: 'auto' }} // optional
+          priority={true}
         />
         <div className='card-bottom'>
           <h3>{title}</h3>

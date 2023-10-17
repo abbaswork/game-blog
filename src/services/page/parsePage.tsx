@@ -89,7 +89,7 @@ export default class PageService {
             //Set Page Properties by checking page property tags
             if (className === WPPropertyTags.FeatureBlogImage) {
                 const { valid, compProps } = getImgAttribs(domNode.children[0]);
-                this.featuredImage = valid ? <HeroImage {...compProps as ImgProps} /> : undefined;
+                this.featuredImage = valid ? <HeroImage priority={true} {...compProps as ImgProps} /> : undefined;
                 return <></>;
             }
 
