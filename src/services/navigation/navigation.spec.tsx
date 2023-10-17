@@ -15,8 +15,6 @@ describe('NavigationService', () => {
 
         it('When given list of one or more menu items, parse them to have the correct interface', () => {
             const test = navigationService.parseLinks(mockMenuItems);
-            console.log('test: ', test);
-
             expect(test).toStrictEqual([ { text: 'Test Page', href: '/test-page' } ]);
         });
 
