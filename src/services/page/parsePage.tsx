@@ -15,6 +15,25 @@ import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Icons } from '@/components/core/icons/Icon';
 import { medalArray } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
+import { wpPreviewHeaders } from '@/config/api';
+
+type categoryOptionsType = {
+    tableOfContents: "bookmarks" | "medals"
+}
+
+type categoryType = {
+    [key: string]: categoryOptionsType
+}
+
+/**
+ * Defines options that can be used when rendering components in the page
+ * these options are defined based on the category being used
+ */
+const categoryOptions: categoryType = {
+    "hidden-gems": { tableOfContents: "medals" },
+    "best": { tableOfContents: "medals" },
+    "spotlight": { tableOfContents: "bookmarks" }
+}
 
 export default class PageService {
 

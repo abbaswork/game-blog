@@ -37,7 +37,11 @@ async function getPost(slug: string[]): Promise<PageService> {
 
   const postsFetch: Page[] = await fetch(`${baseURL}${searchURL}`, {
     headers: wpPreviewHeaders
-  }).then((res) => res.json());
+  }).then((res) => {
+    return res.json();
+  });
+
+  console.log("postsFetch: ", postsFetch);
 
   const postRender = new PageService(postsFetch[0] ? postsFetch[0] : postsFetch as any);
   return postRender;
