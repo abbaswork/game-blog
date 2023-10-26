@@ -1,5 +1,5 @@
 import { emptyPost, testPost } from '@/constants/tests';
-import PageService from './parsePage';
+import PageService, { tableOfContentIcons } from './parsePage';
 import '@testing-library/jest-dom';
 
 describe('PageService', () => {
@@ -50,8 +50,13 @@ describe('PageService', () => {
     });
 
     it('When given array of elements that dont include header, return <>', () => {
-      const result = pageService.parseTOC([<p key="1">test</p>, <p  key="2">test2</p>]);
+      const result = pageService.parseTOC([<p key="1">test</p>, <p key="2">test2</p>]);
       expect(result).toStrictEqual(<></>);
+    });
+
+    it('When given options, generate the correct icons in TOC', () => {
+      const result = pageService.parseTOC([<h2 key="1">test</h2>], { tableOfContents: tableOfContentIcons.MEDALS });
+      expect(JSON.stringify(result)).toContain("medalGold");
     });
 
     it('Ensure Table Of Contents is generated when headers are included in the component array', () => {

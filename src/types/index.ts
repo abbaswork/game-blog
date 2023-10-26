@@ -7,6 +7,15 @@ type PostObj = {
   protected?: boolean
 }
 
+export interface CategoryForPageType {
+  id: number,
+  count: number,
+  description: string,
+  link: string,
+  name: string,
+  slug: string
+}
+
 export interface Page {
   id: number,
   date: string,
@@ -22,6 +31,7 @@ export interface Page {
   meta: any,
   tags: [],
   categories: string[] | number[],
+  categoryForPage?: CategoryForPageType,
   _links: any
 }
 

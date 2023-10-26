@@ -53,6 +53,7 @@
     }
 
     p {
+        font-size: 1.1rem;
         color: #dbddef;
     }
 }
@@ -98,7 +99,7 @@
 
     .rating-item {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         //gap: 1rem;
         // overflow-wrap: nowrap;
 

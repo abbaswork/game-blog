@@ -1,4 +1,4 @@
-import { Page, Meta, ParsedContent } from '@/types';
+import { Page, Meta, ParsedContent, CategoryForPageType } from '@/types';
 import parse, { DOMNode } from 'html-react-parser';
 import { getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
@@ -13,8 +13,39 @@ import { replaceRatingList } from '../replacers/ratingList';
 import { RankLabel } from '@/components/core/rank-label/RankLabel';
 import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Icons } from '@/components/core/icons/Icon';
-import { medalArray } from '@/components/core/icons/types';
+import { medalArray, icon as iconTypes } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
+
+export enum tableOfContentIcons {
+    BOOKMARKS = "bookmarks",
+    MEDALS = "medals"
+}
+
+//supported options for a category
+type categoryOptionsType = {
+    tableOfContents: tableOfContentIcons | undefined
+}
+
+//supported names for a category
+enum categoryOptionNames {
+    HIDDEN_GEMS = "hidden-gems",
+    BEST = "best",
+    SPOTLIGHT = "spotlight"
+}
+
+//type for a category, where any of the above names are supported and use the same type for options
+type categoryType = {
+    [key in categoryOptionNames]: categoryOptionsType
+}
+/**
+ * Defines options that can be used when rendering components in the page
+ * these options are defined based on the category being used
+ */
+const categoryOptions: categoryType = {
+    [categoryOptionNames.HIDDEN_GEMS]: { tableOfContents: tableOfContentIcons.MEDALS },
+    [categoryOptionNames.BEST]: { tableOfContents: tableOfContentIcons.MEDALS },
+    [categoryOptionNames.SPOTLIGHT]: { tableOfContents: undefined }
+}
 
 export default class PageService {
 
@@ -24,18 +55,28 @@ export default class PageService {
     meta: Meta;
     featuredImage: ParsedContent | undefined;
     tableOfContents: React.JSX.Element;
+    categoryPageOptions: categoryOptionsType | undefined;
 
     /**
-     * Initialise and parse default params
+     * Initialise and parse default params in order
      * @param post 
      * @param parseContentOptions - useful for specific pages and classes that extend page
      */
     constructor(post: Page) {
-        const parseContent = this.parseContent(post.content.rendered);
         this.post = post;
+
+        const parseContent = this.parseContent(post.content.rendered);
         this.content = parseContent;
+
+        const parseCategory = post.categoryForPage ? this.parseCategory(post.categoryForPage) : undefined;
+        this.categoryPageOptions = parseCategory;
+
         this.meta = this.parseMeta(post);
-        this.tableOfContents = this.parseTOC(parseContent);
+        this.tableOfContents = this.parseTOC(parseContent, parseCategory);
+    }
+
+    parseCategory(categoryForPage: CategoryForPageType): categoryOptionsType {
+        return categoryOptions[categoryForPage.slug as categoryOptionNames];
     }
 
     //parse meta properties from wp pages
@@ -157,7 +198,7 @@ export default class PageService {
      * @param content 
      * @returns 
      */
-    parseTOC = (content: ParsedContent): React.JSX.Element => {
+    parseTOC = (content: ParsedContent, options?: categoryOptionsType): React.JSX.Element => {
 
         const tableOfContents: React.JSX.Element[] = [];
 
@@ -169,7 +210,25 @@ export default class PageService {
         var tocIndex = 0;
         (content as React.JSX.Element[]).map((element: React.JSX.Element, index) => {
             if (element.type === 'h2') {
-                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : (<span style={{ paddingLeft: "0.5rem" }}>{tocIndex + 1 + ". "}</span>)}{element.props.children[0]}</a></li>);
+                var icon: JSX.Element | string;
+
+                //configure icons for TOC based on the category
+                switch (options?.tableOfContents) {
+
+                    case tableOfContentIcons.MEDALS:
+                        icon = tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : <strong style={{ paddingLeft: "0.5rem", paddingRight: "0.2rem" }}>{tocIndex + 1 + "."}</strong>;
+                        break;
+
+                    case tableOfContentIcons.BOOKMARKS:
+                        icon = <strong style={{ paddingLeft: "0.5rem", paddingRight: "0.2rem" }}>{tocIndex + 1 + "."}</strong>
+                        break;
+
+                    default:
+                        icon = <></>;
+                        break;
+                }
+
+                tableOfContents.push(<li key={index}><a style={{ fontSize: "1.1rem" }} href={`#${element.props.id}`}>{icon}{element.props.children[0]}</a></li>);
                 tocIndex++;
             }
         });

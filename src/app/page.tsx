@@ -8,7 +8,6 @@ async function getPage(slug: string): Promise<PageService> {
   const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/pages?slug=${slug}&per_page=1`,
     {
       headers: wpPreviewHeaders,
-      next: { revalidate: 0 }
     }
   ).then((res) => res.json())
   .catch(e => console.log('e: ', e));
