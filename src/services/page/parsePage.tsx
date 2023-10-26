@@ -17,20 +17,20 @@ import { medalArray, icon as iconTypes } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
 
 export enum tableOfContentIcons {
-    BOOKMARKS="bookmarks",
-    MEDALS="medals"
+    BOOKMARKS = "bookmarks",
+    MEDALS = "medals"
 }
 
 //supported options for a category
 type categoryOptionsType = {
-    tableOfContents: tableOfContentIcons
+    tableOfContents: tableOfContentIcons | undefined
 }
 
 //supported names for a category
 enum categoryOptionNames {
-    HIDDEN_GEMS="hidden-gems",
-    BEST="best",
-    SPOTLIGHT="spotlight"
+    HIDDEN_GEMS = "hidden-gems",
+    BEST = "best",
+    SPOTLIGHT = "spotlight"
 }
 
 //type for a category, where any of the above names are supported and use the same type for options
@@ -44,7 +44,7 @@ type categoryType = {
 const categoryOptions: categoryType = {
     [categoryOptionNames.HIDDEN_GEMS]: { tableOfContents: tableOfContentIcons.MEDALS },
     [categoryOptionNames.BEST]: { tableOfContents: tableOfContentIcons.MEDALS },
-    [categoryOptionNames.SPOTLIGHT]: { tableOfContents: tableOfContentIcons.BOOKMARKS }
+    [categoryOptionNames.SPOTLIGHT]: { tableOfContents: undefined }
 }
 
 export default class PageService {
@@ -211,24 +211,24 @@ export default class PageService {
         (content as React.JSX.Element[]).map((element: React.JSX.Element, index) => {
             if (element.type === 'h2') {
                 var icon: JSX.Element | string;
-                
+
                 //configure icons for TOC based on the category
-                switch(options?.tableOfContents){
+                switch (options?.tableOfContents) {
 
                     case tableOfContentIcons.MEDALS:
-                        icon = tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : <strong style={{paddingLeft: "0.5rem", paddingRight: "0.2rem"}}>{tocIndex + 1 + "."}</strong>;
+                        icon = tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : <strong style={{ paddingLeft: "0.5rem", paddingRight: "0.2rem" }}>{tocIndex + 1 + "."}</strong>;
                         break;
-                    
+
                     case tableOfContentIcons.BOOKMARKS:
-                        icon = <Icons icon={iconTypes.bookmarks} />
+                        icon = <strong style={{ paddingLeft: "0.5rem", paddingRight: "0.2rem" }}>{tocIndex + 1 + "."}</strong>
                         break;
-                    
+
                     default:
                         icon = <></>;
                         break;
                 }
 
-                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{icon}{element.props.children[0]}</a></li>);
+                tableOfContents.push(<li key={index}><a style={{ fontSize: "1.1rem" }} href={`#${element.props.id}`}>{icon}{element.props.children[0]}</a></li>);
                 tocIndex++;
             }
         });
