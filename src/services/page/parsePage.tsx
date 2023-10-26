@@ -210,13 +210,13 @@ export default class PageService {
         var tocIndex = 0;
         (content as React.JSX.Element[]).map((element: React.JSX.Element, index) => {
             if (element.type === 'h2') {
-                var icon: JSX.Element;
+                var icon: JSX.Element | string;
                 
                 //configure icons for TOC based on the category
                 switch(options?.tableOfContents){
 
                     case tableOfContentIcons.MEDALS:
-                        icon = tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : (<span style={{ paddingLeft: "0.5rem" }}>{tocIndex + 1 + ". "}</span>);
+                        icon = tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : <strong style={{paddingLeft: "0.5rem", paddingRight: "0.2rem"}}>{tocIndex + 1 + "."}</strong>;
                         break;
                     
                     case tableOfContentIcons.BOOKMARKS:
