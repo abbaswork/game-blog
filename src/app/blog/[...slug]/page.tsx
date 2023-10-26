@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Page } from "@/types";
+import { CategoryForPageType, Page } from "@/types";
 import { wpPreviewHeaders } from '@/config/api';
 import { draftMode } from 'next/headers';
 import PageService from '@/services/page/parsePage';
@@ -32,18 +32,23 @@ async function getPost(slug: string[]): Promise<PageService> {
   const draftPage = isEnabled && slug[0] === 'draft';
 
   //create url parts, search params change based on url type
-  const baseURL = `${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts`;
-  var searchURL = draftPage ? `/${slug[1]}` : `?slug=${slug[0]}&per_page=1`;
+  const baseURL = `${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/`;
+  var searchURL = draftPage ? `posts/${slug[1]}` : `posts/?slug=${slug[0]}&per_page=1`;
 
   const postsFetch: Page[] = await fetch(`${baseURL}${searchURL}`, {
     headers: wpPreviewHeaders
-  }).then((res) => {
-    return res.json();
-  });
+  }).then((res) => res.json());
+  var post: Page = postsFetch[0];
 
-  console.log("postsFetch: ", postsFetch);
+  //query category for page
+  if (post.categories[0]) {
+    const category: CategoryForPageType = await fetch(`${baseURL}/categories/${post.categories[0]}`, {
+      headers: wpPreviewHeaders
+    }).then((res) => res.json());
+    post.categoryForPage = category;
+  }
 
-  const postRender = new PageService(postsFetch[0] ? postsFetch[0] : postsFetch as any);
+  const postRender = new PageService(post);
   return postRender;
 }
 

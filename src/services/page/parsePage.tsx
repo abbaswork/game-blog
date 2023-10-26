@@ -1,4 +1,4 @@
-import { Page, Meta, ParsedContent } from '@/types';
+import { Page, Meta, ParsedContent, CategoryForPageType } from '@/types';
 import parse, { DOMNode } from 'html-react-parser';
 import { getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
@@ -15,24 +15,31 @@ import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Icons } from '@/components/core/icons/Icon';
 import { medalArray } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
-import { wpPreviewHeaders } from '@/config/api';
 
+//supported options for a category
 type categoryOptionsType = {
     tableOfContents: "bookmarks" | "medals"
 }
 
-type categoryType = {
-    [key: string]: categoryOptionsType
+//supported names for a category
+enum categoryOptionNames {
+    HIDDEN_GEMS="hidden-gems",
+    BEST="best",
+    SPOTLIGHT="spotlight"
 }
 
+//type for a category, where any of the above names are supported and use the same type for options
+// type categoryType = {
+//     [key: typeof categoryOptionNames]: categoryOptionsType
+// }
 /**
  * Defines options that can be used when rendering components in the page
  * these options are defined based on the category being used
  */
-const categoryOptions: categoryType = {
-    "hidden-gems": { tableOfContents: "medals" },
-    "best": { tableOfContents: "medals" },
-    "spotlight": { tableOfContents: "bookmarks" }
+const categoryOptions = {
+    [categoryOptionNames.HIDDEN_GEMS]: { tableOfContents: "medals" },
+    [categoryOptionNames.BEST]: { tableOfContents: "medals" },
+    [categoryOptionNames.SPOTLIGHT]: { tableOfContents: "bookmarks" }
 }
 
 export default class PageService {
@@ -43,18 +50,26 @@ export default class PageService {
     meta: Meta;
     featuredImage: ParsedContent | undefined;
     tableOfContents: React.JSX.Element;
+    categoryPageOptions: categoryOptionsType | undefined;
 
     /**
-     * Initialise and parse default params
+     * Initialise and parse default params in order
      * @param post 
      * @param parseContentOptions - useful for specific pages and classes that extend page
      */
     constructor(post: Page) {
-        const parseContent = this.parseContent(post.content.rendered);
         this.post = post;
+        this.categoryPageOptions = post.categoryForPage ? this.parseCategory(post.categoryForPage) : undefined;
+
+        const parseContent = this.parseContent(post.content.rendered);
         this.content = parseContent;
+
         this.meta = this.parseMeta(post);
         this.tableOfContents = this.parseTOC(parseContent);
+    }
+
+    parseCategory(categoryForPage: CategoryForPageType): categoryOptionsType {
+        return categoryOptions[categoryOptionNames.BEST];
     }
 
     //parse meta properties from wp pages
@@ -188,6 +203,14 @@ export default class PageService {
         var tocIndex = 0;
         (content as React.JSX.Element[]).map((element: React.JSX.Element, index) => {
             if (element.type === 'h2') {
+                var icon: JSX.Element;
+                
+                //configure icons for seperate TOC
+                switch(this.categoryOptions){
+                    case 
+                }
+
+                if(this.categoryOptions)
                 tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : (<span style={{ paddingLeft: "0.5rem" }}>{tocIndex + 1 + ". "}</span>)}{element.props.children[0]}</a></li>);
                 tocIndex++;
             }
