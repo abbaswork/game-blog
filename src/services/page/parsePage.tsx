@@ -13,12 +13,17 @@ import { replaceRatingList } from '../replacers/ratingList';
 import { RankLabel } from '@/components/core/rank-label/RankLabel';
 import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Icons } from '@/components/core/icons/Icon';
-import { medalArray } from '@/components/core/icons/types';
+import { medalArray, icon as iconTypes } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
+
+export enum tableOfContentIcons {
+    BOOKMARKS="bookmarks",
+    MEDALS="medals"
+}
 
 //supported options for a category
 type categoryOptionsType = {
-    tableOfContents: "bookmarks" | "medals"
+    tableOfContents: tableOfContentIcons
 }
 
 //supported names for a category
@@ -29,17 +34,17 @@ enum categoryOptionNames {
 }
 
 //type for a category, where any of the above names are supported and use the same type for options
-// type categoryType = {
-//     [key: typeof categoryOptionNames]: categoryOptionsType
-// }
+type categoryType = {
+    [key in categoryOptionNames]: categoryOptionsType
+}
 /**
  * Defines options that can be used when rendering components in the page
  * these options are defined based on the category being used
  */
-const categoryOptions = {
-    [categoryOptionNames.HIDDEN_GEMS]: { tableOfContents: "medals" },
-    [categoryOptionNames.BEST]: { tableOfContents: "medals" },
-    [categoryOptionNames.SPOTLIGHT]: { tableOfContents: "bookmarks" }
+const categoryOptions: categoryType = {
+    [categoryOptionNames.HIDDEN_GEMS]: { tableOfContents: tableOfContentIcons.MEDALS },
+    [categoryOptionNames.BEST]: { tableOfContents: tableOfContentIcons.MEDALS },
+    [categoryOptionNames.SPOTLIGHT]: { tableOfContents: tableOfContentIcons.BOOKMARKS }
 }
 
 export default class PageService {
@@ -59,17 +64,19 @@ export default class PageService {
      */
     constructor(post: Page) {
         this.post = post;
-        this.categoryPageOptions = post.categoryForPage ? this.parseCategory(post.categoryForPage) : undefined;
 
         const parseContent = this.parseContent(post.content.rendered);
         this.content = parseContent;
 
+        const parseCategory = post.categoryForPage ? this.parseCategory(post.categoryForPage) : undefined;
+        this.categoryPageOptions = parseCategory;
+
         this.meta = this.parseMeta(post);
-        this.tableOfContents = this.parseTOC(parseContent);
+        this.tableOfContents = this.parseTOC(parseContent, parseCategory);
     }
 
     parseCategory(categoryForPage: CategoryForPageType): categoryOptionsType {
-        return categoryOptions[categoryOptionNames.BEST];
+        return categoryOptions[categoryForPage.slug as categoryOptionNames];
     }
 
     //parse meta properties from wp pages
@@ -191,7 +198,7 @@ export default class PageService {
      * @param content 
      * @returns 
      */
-    parseTOC = (content: ParsedContent): React.JSX.Element => {
+    parseTOC = (content: ParsedContent, options?: categoryOptionsType): React.JSX.Element => {
 
         const tableOfContents: React.JSX.Element[] = [];
 
@@ -205,13 +212,23 @@ export default class PageService {
             if (element.type === 'h2') {
                 var icon: JSX.Element;
                 
-                //configure icons for seperate TOC
-                switch(this.categoryOptions){
-                    case 
+                //configure icons for TOC based on the category
+                switch(options?.tableOfContents){
+
+                    case tableOfContentIcons.MEDALS:
+                        icon = tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : (<span style={{ paddingLeft: "0.5rem" }}>{tocIndex + 1 + ". "}</span>);
+                        break;
+                    
+                    case tableOfContentIcons.BOOKMARKS:
+                        icon = <Icons icon={iconTypes.bookmarks} />
+                        break;
+                    
+                    default:
+                        icon = <></>;
+                        break;
                 }
 
-                if(this.categoryOptions)
-                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{tocIndex < 3 ? <Icons icon={medalArray[tocIndex]} /> : (<span style={{ paddingLeft: "0.5rem" }}>{tocIndex + 1 + ". "}</span>)}{element.props.children[0]}</a></li>);
+                tableOfContents.push(<li key={index}><a href={`#${element.props.id}`}>{icon}{element.props.children[0]}</a></li>);
                 tocIndex++;
             }
         });
