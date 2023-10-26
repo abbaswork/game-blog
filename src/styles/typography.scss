@@ -13,3 +13,11 @@ h3{
         color: var(--primary-light);
     }
 }
+
+.blog-page, .home-page {
+    p.caption-text {
+    font-size: .95rem;
+    color: lightslategray;
+    font-style: italic;
+    }
+}
