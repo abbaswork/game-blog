@@ -41,8 +41,14 @@ async function getPost(slug: string[]): Promise<PageService> {
 
   var post: Page = postsFetch[0] ? postsFetch[0] : postsFetch as any;
 
+  //catch error
+  if(!post || !post.content){
+    console.log(`WP Fetch Error for ${searchURL}: `, postsFetch);
+    throw Error(`Page could not be retrieved from WP, check terminal for more info`);
+  }
+
   //query category for page
-  if (post?.categories[0]) {
+  if (post.categories) {
     const category: CategoryForPageType = await fetch(`${baseURL}/categories/${post.categories[0]}`, {
       headers: wpPreviewHeaders
     }).then((res) => res.json()).catch(e => console.log(e));

@@ -41,6 +41,7 @@ export const replacePostCard = (domNode: Element): ReplaceProps => {
             props.description = (child as ElementText).data || "";
 
         if (!child.name && child.parent && (child.parent as Element).name === "a") {
+            //transforming title because the hrefs are encrypted with id and secret
             props.title = (child as ElementText).data || "";
             props.href = transformTitleUrl(props.title);
         }
