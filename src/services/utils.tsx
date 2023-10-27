@@ -72,5 +72,7 @@ export const getStringProperties = (parseString: string, tags: stringTags[]): {
 export const transformTitleUrl = (title: string, suffix: string = "/blog/"): string => {
     var url = title.toLowerCase();
     url = url.replaceAll(" ", "-");
+    url = url.replaceAll("/", "-");
+    url = url.replaceAll(/[^a-zA-Z0-9-]/g, "");
     return (suffix + url);
 }
