@@ -11,6 +11,6 @@ jobs:
       run: |
         touch .env
         echo WP_PROTOCOL=http >> .env
-        echo WP_DOMAIN=${{ variables.WP_DOMAIN }} >> .env
+        echo WP_DOMAIN=${{ env.WP_DOMAIN }} >> .env
     - name: Run tests
       run: npm run tests
