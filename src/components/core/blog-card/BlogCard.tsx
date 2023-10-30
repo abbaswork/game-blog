@@ -21,11 +21,8 @@ export const BlogCard = ({ src, alt, title, href, description, postCard = true }
   //format description if keywords are there
   const blogDescription = () => {
 
-    if (!postCard)
-      return <p>{description || ""}</p>
-
     //if there is an introduction section, use it as the title and format, otherwise return the description
-    if (!description?.includes("Introduction"))
+    if (!postCard || !description?.includes("Introduction"))
       return <p>{description || ""}</p>
 
     var splitPostIntro = description.split("Introduction");
