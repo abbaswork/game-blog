@@ -11,6 +11,7 @@ const meta: Meta<typeof BlogCard> = {
     src: "https://cdn2.whatoplay.com/news/an-everyday-story-demo.webp",
     alt: "test",
     title: "Card Title",
+    href: "/",
     description: "Card Description"
   },
 };
