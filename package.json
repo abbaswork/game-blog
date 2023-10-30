@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
     "@types/node": "20.2.5",
@@ -40,5 +41,7 @@
     "jest-environment-jsdom": "^29.6.1",
     "sass": "^1.63.4",
     "storybook": "^7.0.18"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "game-blog@0.1.0"
 }
