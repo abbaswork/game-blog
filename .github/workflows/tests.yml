@@ -7,5 +7,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install modules
       run: npm install
+    - name: create env file
+      run: |
+        touch .env
+        echo WP_PROTOCOL=http >> .env
+        echo WP_DOMAIN=${{ variables.WP_DOMAIN }} >> .env
     - name: Run tests
       run: npm run tests
