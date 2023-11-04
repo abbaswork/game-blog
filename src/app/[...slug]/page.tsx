@@ -28,10 +28,10 @@ async function getPage(slug: string): Promise<PageService> {
       headers: wpPreviewHeaders,
     }
   ).then((res) => res.json())
-  .catch(e => console.log('e: ', e));
+    .catch(e => console.log('e: ', e));
 
   //this function is only run when a page that exists is accessed
-  if(!pageFetch[0]){
+  if (!pageFetch[0]) {
     console.log('WP Error: ', pageFetch);
     throw Error(`Page could not be retrieved from WP, check terminal for more info`);
   }
@@ -51,13 +51,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   }
 }
 
-export default async function Page({params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: { slug: string } }) {
 
   const page = await getPage(params.slug);
 
   return (
     <main className='home-page'>
-      {page.meta.title}
+      <h1 className="wp-title">{page.meta.title}</h1>
       {page.content}
     </main>
   )
