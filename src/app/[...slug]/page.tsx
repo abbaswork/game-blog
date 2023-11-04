@@ -22,8 +22,8 @@ export async function generateStaticParams() {
 }
 
 //get blog data fetch
-async function getPage(page: string): Promise<PageService> {
-  const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/pages?slug=${page}&per_page=1`,
+async function getPage(slug: string): Promise<PageService> {
+  const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/pages?slug=${slug}&per_page=1`,
     {
       headers: wpPreviewHeaders,
     }
@@ -40,17 +40,20 @@ async function getPage(page: string): Promise<PageService> {
   return pageRender;
 }
 
-export const metadata: Metadata = {
-  title: "Metric Gamer: curated list of ranked games for PS2 and more",
-  description: "Checkout our list of best games for modern and older consoles",
-  alternates: {
-    canonical: "/"
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const title = params.slug[0].replaceAll("-", " ");
+  return {
+    title: title,
+    description: `Check out the our list of ${title}`,
+    alternates: {
+      canonical: `/${params.slug}`
+    }
   }
 }
 
-export default async function Page({params }: { params: { page: string } }) {
+export default async function Page({params }: { params: { slug: string } }) {
 
-  const page = await getPage(params.page);
+  const page = await getPage(params.slug);
 
   return (
     <main className='home-page'>
