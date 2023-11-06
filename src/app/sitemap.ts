@@ -38,7 +38,7 @@ const mapToSitemap = (urls: { slug: string, modifed: string }[], type: "pages" |
   return urls.map(url => ({
     url: `https://www.metricgamer.com/${type === "posts" ? "posts/" : ""}${url.slug}`,
     lastModified: new Date(url.modifed),
-    changeFrequency: 'monthly',
+    changeFrequency: type === "posts" ? "monthly" : "weekly",
     priority: 0.8,
   }))
 }
@@ -51,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: 'https://www.metricgamer.com',
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'weekly',
       priority: 1,
     },
     ...pages,
