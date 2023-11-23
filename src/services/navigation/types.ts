@@ -20,4 +20,31 @@ export type menuItem = {
   _links: any
 }
 
+export type tagItem = {
+  id: number,
+  name: string,
+  description?: string
+}
+
+export type searchResults = {
+  id: number,
+  title: string,
+  url: string,
+  type: string,
+  subtype: "post" | "page" | "category" | "post_tag"
+}
+
+export enum NavSearchType{
+  tags = "TAG",
+  url = "URL",
+  category = "CATEGORY"
+}
+
+export type blogItem = {
+  generated_slug: string,
+  meta: Object,
+  tags: Object[],
+  categories: Object[]
+}
+
 export type menuLinkProps = { text: string, href: string };
