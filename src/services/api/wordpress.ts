@@ -63,12 +63,13 @@ export default class WordpressApi {
      * @param param0 
      * @returns 
      */
-    getBlogs = ({ tags, categories, search, pages, filter }: { tags?: number[], categories?: number[], search?: string, pages?: number, filter?: string }): Promise<Page[]> => {
+    getBlogs = ({ tags, categories, search, pages, filter, exclude}: { tags?: number[], categories?: number[], search?: string, pages?: number, filter?: string, exclude?: number[] }): Promise<Page[]> => {
         return this.query(`posts/`
             + (pages ? `?per_page=${pages}` : "?per_page=100")
             + (tags ? `&tags=${tags}` : "")
             + (categories ? `&categories=${categories}` : "")
             + (search ? `&search=${search}` : "")
+            + (exclude ? `&exclude=${exclude}` : "")
             + (filter ? `&_filter=${filter}` : "")
         )
     }

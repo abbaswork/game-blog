@@ -37,6 +37,7 @@ export interface Page {
 export type ParsedContent = string | JSX.Element | JSX.Element[];
 
 export interface Meta {
+  id: number,
   slug: string,
   title: string,
   date: string,
