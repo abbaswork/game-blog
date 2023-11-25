@@ -4,7 +4,7 @@ import { getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
 import { GameTag } from '@/components/core/game-tag/GameTag';
 import { replaceWithTitleWithRating } from '../replacers/titleWithRating';
-import { WPPropertyTags, WPTags } from '@/constants';
+import { PageTypes, WPPropertyTags, WPTags } from '@/constants';
 import { replacePostCard } from '../replacers/postCard';
 import { BlogCard, BlogCardProps } from '@/components/core/blog-card/BlogCard';
 import { GameTagProps, ImgProps, RatingListProps, TitleWithRatingProps } from '@/constants/replacers';
@@ -15,6 +15,8 @@ import { ListContainer } from '@/components/core/list-container/ListContainer';
 import { Icons } from '@/components/core/icons/Icon';
 import { medalArray, icon as iconTypes } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
+import WordpressApi from '../api/wordpress';
+import React from 'react';
 
 export enum tableOfContentIcons {
     BOOKMARKS = "bookmarks",
@@ -55,7 +57,9 @@ export default class PageService {
     meta: Meta;
     featuredImage: ParsedContent | undefined;
     tableOfContents: React.JSX.Element;
+    sidebar: any;
     categoryPageOptions: categoryOptionsType | undefined;
+    API = new WordpressApi();
 
     /**
      * Initialise and parse default params in order
@@ -82,9 +86,13 @@ export default class PageService {
     //parse meta properties from wp pages
     parseMeta = (post: Page): Meta => {
         return {
+            id: post.id,
             title: post.title.rendered,
             slug: post.slug,
             date: post.date ? new Date(post.date).toDateString() : "",
+            tags: post.tags,
+            type: post.type,
+            categories: post.categories
         };
     }
 
@@ -192,6 +200,39 @@ export default class PageService {
         }
     }
 
+    /**
+     * Leverages WP API to find related blogs and parse into React Component
+     * @param meta 
+     */
+    parseSidebar = async (meta: Meta) => {
+        //use existing tags to find similiar blogs that can be showcased in related blogs
+        var content: JSX.Element | JSX.Element[];
+
+        //check if blog page, in which case return list of blogs that 
+        if (meta.type === PageTypes.post) {
+
+            //get list of blogs that also contain the same tag and filter out content
+            var relatedBlogs = await this.API.getBlogs({ tags: meta.tags, filter: "content", exclude: [meta.id] });
+
+            if (!relatedBlogs)
+                content = <p>No related blogs found, please check back later</p>
+
+            else
+                content = relatedBlogs.map((blog) => { return (<a href={blog.slug}>{"> " + blog.title.rendered}</a>) });
+        }
+
+        //if not a blog page, return default text
+        else
+            content = <p>Please click on a blog, to see recommendations</p>
+
+
+        //render content through sidbar
+        return (
+            <ListContainer title='Sidebar' className='sidebar'>
+                {content}
+            </ListContainer>
+        );
+    }
 
     /**
      * After content has been parsed, filter through h2 components to create table of contents
