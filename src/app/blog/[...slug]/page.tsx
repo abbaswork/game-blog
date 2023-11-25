@@ -3,7 +3,6 @@ import { CategoryForPageType, Page } from "@/types";
 import { wpPreviewHeaders } from '@/config/api';
 import { draftMode } from 'next/headers';
 import PageService from '@/services/page/parsePage';
-import { Sidebar } from '@/components/sidebar/Sidebar';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 
 

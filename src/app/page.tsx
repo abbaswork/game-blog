@@ -2,6 +2,7 @@ import { Page } from '@/types';
 import PageService from '@/services/page/parsePage';
 import { Metadata } from 'next';
 import { wpPreviewHeaders } from '@/config/api';
+import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
@@ -10,10 +11,10 @@ async function getPage(slug: string): Promise<PageService> {
       headers: wpPreviewHeaders,
     }
   ).then((res) => res.json())
-  .catch(e => console.log('e: ', e));
+    .catch(e => console.log('e: ', e));
 
   //this function is only run when a page that exists is accessed
-  if(!pageFetch[0]){
+  if (!pageFetch[0]) {
     console.log('WP Error: ', pageFetch);
     throw Error(`Page could not be retrieved from WP, check terminal for more info`);
   }
@@ -33,10 +34,20 @@ export const metadata: Metadata = {
 export default async function Home() {
 
   const page = await getPage('home-page');
+  const sidebar = await page.parseSidebar(page.meta);
 
   return (
-    <main className='home-page'>
-      {page.content}
-    </main>
+    <>
+      <div className='page-content'>
+        <main className='home-page'>
+          {page.content}
+        </main>
+
+      </div>
+
+      <SidePanel>
+        {sidebar}
+      </SidePanel>
+    </>
   )
 }
