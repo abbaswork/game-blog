@@ -2,6 +2,15 @@ import { menuItem } from "@/services/navigation/types";
 import { Page } from "@/types";
 
 import { Element } from 'html-react-parser';
+import { PageTypes } from ".";
+
+export const setupFetchMock = (mockData: any) => {
+    global.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+            json: () => Promise.resolve(mockData),
+        })
+    );
+};
 
 export const mockEmptyElement: Element = {
     name: '', //key property, usually class name
@@ -102,7 +111,7 @@ export const testPost: Page =
     "modified": "2023-07-13T10:45:16",
     "slug": "hello-world-2",
     "status": "publish",
-    "type": "post",
+    "type": PageTypes.post,
     "link": "http://gameblog.local/hello-world-2/",
     "title": {
         "rendered": "Hello World 2"
@@ -200,7 +209,7 @@ export const emptyPost: Page = {
     "modified": "",
     "slug": "",
     "status": "",
-    "type": "",
+    "type": PageTypes.post,
     "link": "",
     "title": {
         "rendered": ""

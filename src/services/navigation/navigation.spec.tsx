@@ -1,14 +1,6 @@
+import { setupFetchMock } from '@/constants/tests';
 import NavigationService from './navigation';
 import '@testing-library/jest-dom';
-
-//mock fetch
-const setupFetchMock = (mockData: any) => {
-    global.fetch = jest.fn().mockImplementation(() =>
-        Promise.resolve({
-            json: () => Promise.resolve(mockData),
-        })
-    );
-};
 
 describe('NavigationService', () => {
 
