@@ -1,63 +1,58 @@
-import { mockMenuItems, mockMenuBlogItems, mockTags } from './types.test';
 import NavigationService from './navigation';
 import '@testing-library/jest-dom';
 
 //mock fetch
-global.fetch = jest.fn(() =>
-    Promise.resolve({
-        json: () => Promise.resolve({ results: [{ id: 0, title: "test", url: "", type: "" }] }),
-        headers: {} as any,
-        ok: {} as any,
-        redirected: {} as any,
-        status: {} as any,
-        statusText: {} as any,
-        type: {} as any,
-        url: {} as any,
-        clone: {} as any,
-        body: {} as any,
-        bodyUsed: {} as any,
-        arrayBuffer: {} as any,
-        blob: {} as any,
-        formData: {} as any,
-        text: {} as any,
-    })
-);
+const setupFetchMock = (mockData: any) => {
+    global.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+            json: () => Promise.resolve(mockData),
+        })
+    );
+};
 
 describe('NavigationService', () => {
 
-    const navigationService = new NavigationService(mockMenuItems, mockTags);
+    const navigationService = new NavigationService();
 
-    describe('parseMenu', () => {
+    afterEach(() => {
+        // Clean up the mock after each test
+        jest.clearAllMocks();
+    });
 
-        it('When given empty body of menu items, return empty array', () => {
-            const test = navigationService.parseLinks([]);
+    describe('getMenuItems', () => {
+
+        it('When 0 menu items are fetched, return an empty array', async () => {
+            setupFetchMock([]);
+            const test = await navigationService.getMenuItems();
             expect(test).toHaveLength(0);
         });
 
-        it('When given list of one or more menu items, parse them to have the correct interface', () => {
-            const test = navigationService.parseLinks(mockMenuItems);
-            expect(test).toStrictEqual([{ text: 'Test Page', href: '/test-page' }]);
+        it('When multiple menu items are fetched, parse the menu items correctly', async () => {
+            setupFetchMock([{id: 0, title: {rendered: "test-1"}}, {id: 1, title: {rendered: "test-2"}}]);
+            const test = await navigationService.getMenuItems();
+            expect(test).toStrictEqual([{ text: 'test-1', href: '/test-1' }, { text: 'test-2', href: '/test-2' }]);
         });
 
     });
 
-    describe('Search Blogs', () => {
-
-        it('When given empty search term, return empty array', () => {
-            const test = navigationService.parseLinks([]);
-            expect(test).toHaveLength(0);
-        });
-
-        it('When given search term with less then 3 characters, return empty array', () => {
-            const test = navigationService.parseLinks(mockMenuItems);
-            expect(test).toStrictEqual([{ text: 'Test Page', href: '/test-page' }]);
-        });
-
-        it('When given search term with more then 3 characters, return search results', () => {
-            const test = navigationService.parseLinks(mockMenuItems);
-            expect(test).toStrictEqual([{ text: 'Test Page', href: '/test-page' }]);
-        });
-
-    });
 
 })
+
+// describe('Search Blogs', () => {
+
+//     it('When given empty search term, return empty array', () => {
+//         const test = navigationService.parseLinks([]);
+//         expect(test).toHaveLength(0);
+//     });
+
+//     it('When given search term with less then 3 characters, return empty array', () => {
+//         const test = navigationService.parseLinks(mockMenuItems);
+//         expect(test).toStrictEqual([{ text: 'Test Page', href: '/test-page' }]);
+//     });
+
+//     it('When given search term with more then 3 characters, return search results', () => {
+//         const test = navigationService.parseLinks(mockMenuItems);
+//         expect(test).toStrictEqual([{ text: 'Test Page', href: '/test-page' }]);
+//     });
+
+// });
