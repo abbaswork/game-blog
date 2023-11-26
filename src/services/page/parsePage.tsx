@@ -221,7 +221,7 @@ export default class PageService {
 
             //if blogs were found, map them in links
             if (relatedBlogs)
-                content = relatedBlogs.map((blog) => { return (<a href={blog.slug}>{"- " + blog.title.rendered}</a>) });
+                content = relatedBlogs.map((blog, index) => { return (<a key={index} href={blog.slug}>{"- " + blog.title.rendered}</a>) });
         }
 
         //if not a blog page, return default text
