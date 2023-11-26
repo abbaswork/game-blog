@@ -1,5 +1,4 @@
-import { WPTags } from '@/constants/index';
-import { DOMNode } from "html-react-parser";
+import { PageTypes, WPTags } from '@/constants/index';
 
 //default Post obj from wp rest api
 type PostObj = {
@@ -22,7 +21,7 @@ export interface Page {
   modified: string,
   slug: string,
   status: string,
-  type: string,
+  type: PageTypes,
   link: string,
   title: PostObj,
   content: PostObj,
@@ -30,7 +29,7 @@ export interface Page {
   author: number,
   meta: any,
   tags: [],
-  categories: string[] | number[],
+  categories: number[],
   categoryForPage?: CategoryForPageType,
   _links: any
 }
@@ -38,9 +37,13 @@ export interface Page {
 export type ParsedContent = string | JSX.Element | JSX.Element[];
 
 export interface Meta {
+  id: number,
   slug: string,
   title: string,
-  date: string
+  date: string,
+  type: PageTypes,
+  tags?: number[],
+  categories?: number[],
 }
 
 export type ReplaceOptions = {

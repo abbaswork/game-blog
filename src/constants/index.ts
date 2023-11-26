@@ -12,3 +12,8 @@ export enum WPTags {
 export enum WPPropertyTags {
     FeatureBlogImage = "wp-block-post-featured-image",
 }
+
+export enum PageTypes {
+    page="page",
+    post="post"
+}

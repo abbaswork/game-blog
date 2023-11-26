@@ -2,6 +2,7 @@ import { Page } from '@/types';
 import PageService from '@/services/page/parsePage';
 import { Metadata } from 'next';
 import { wpPreviewHeaders } from '@/config/api';
+import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 
 /**
  * Generate static paths for blog pages
@@ -54,11 +55,20 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default async function Page({ params }: { params: { slug: string } }) {
 
   const page = await getPage(params.slug);
+  const sidebar = await page.parseSidebar(page.meta);
 
   return (
-    <main className='home-page'>
-      <h1 className="wp-title">{page.meta.title}</h1>
-      {page.content}
-    </main>
+    <>
+      <div className='page-content'>
+        <main className='home-page'>
+          <h1 className="wp-title">{page.meta.title}</h1>
+          {page.content}
+        </main>
+      </div>
+
+      <SidePanel>
+        {sidebar}
+      </SidePanel>
+    </>
   )
 }

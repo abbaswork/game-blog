@@ -3,13 +3,6 @@ import { ReplaceProps, ElementText } from "@/constants/replacers";
 import { Element } from "html-react-parser";
 import { transformTitleUrl } from "../utils";
 
-//replace any absolute urls from wp, into relative urls for next
-const buildRelativeURL = (src: string): string => {
-    const tokens = src.split(".com");
-    return (tokens ? tokens[1] : "");
-}
-
-
 
 export const replacePostCard = (domNode: Element): ReplaceProps => {
 

@@ -2,6 +2,15 @@ import { menuItem } from "@/services/navigation/types";
 import { Page } from "@/types";
 
 import { Element } from 'html-react-parser';
+import { PageTypes } from ".";
+
+export const setupFetchMock = (mockData: any) => {
+    global.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+            json: () => Promise.resolve(mockData),
+        })
+    );
+};
 
 export const mockEmptyElement: Element = {
     name: '', //key property, usually class name
@@ -102,7 +111,7 @@ export const testPost: Page =
     "modified": "2023-07-13T10:45:16",
     "slug": "hello-world-2",
     "status": "publish",
-    "type": "post",
+    "type": PageTypes.post,
     "link": "http://gameblog.local/hello-world-2/",
     "title": {
         "rendered": "Hello World 2"
@@ -200,7 +209,7 @@ export const emptyPost: Page = {
     "modified": "",
     "slug": "",
     "status": "",
-    "type": "",
+    "type": PageTypes.post,
     "link": "",
     "title": {
         "rendered": ""
@@ -285,68 +294,3 @@ export const emptyPost: Page = {
         ]
     }
 }
-
-export const mockMenuItems: menuItem[] = [{
-    "id": 179,
-    "title": {
-        "rendered": "Test Page"
-    },
-    "status": "publish",
-    "url": "https:www.metricgamer.com/draft?id=&secret=QvcUlC6vzRWYTPmovA21svFRE3dlx6Tx",
-    "attr_title": "",
-    "description": "",
-    "type": "post_type",
-    "type_label": "Page",
-    "object": "page",
-    "object_id": 8,
-    "parent": 0,
-    "menu_order": 1,
-    "target": "",
-    "classes": [
-        ""
-    ],
-    "xfn": [
-        ""
-    ],
-    "invalid": false,
-    "meta": [],
-    "menus": 3,
-    "_links": {
-        "self": [
-            {
-                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/menu-items/179"
-            }
-        ],
-        "collection": [
-            {
-                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/menu-items"
-            }
-        ],
-        "about": [
-            {
-                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/types/nav_menu_item"
-            }
-        ],
-        "wp:term": [
-            {
-                "taxonomy": "nav_menu",
-                "embeddable": true,
-                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/menus?post=179"
-            }
-        ],
-        "wp:menu-item-object": [
-            {
-                "post_type": "page",
-                "embeddable": true,
-                "href": "http://ec2-18-213-34-154.compute-1.amazonaws.com/wp-json/wp/v2/pages/8"
-            }
-        ],
-        "curies": [
-            {
-                "name": "wp",
-                "href": "https://api.w.org/{rel}",
-                "templated": true
-            }
-        ]
-    }
-  }]
