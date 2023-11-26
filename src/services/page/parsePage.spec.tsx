@@ -1,6 +1,8 @@
-import { emptyPost, testPost } from '@/constants/tests';
+import { emptyPost, setupFetchMock, testPost } from '@/constants/tests';
 import PageService, { tableOfContentIcons } from './parsePage';
 import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
+import { PageTypes } from '@/constants';
 
 describe('PageService', () => {
   const pageService = new PageService(testPost);
@@ -62,6 +64,33 @@ describe('PageService', () => {
     it('Ensure Table Of Contents is generated when headers are included in the component array', () => {
       const result = pageService.parseTOC([<h2 key="1">test</h2>, <h2 key="2">test2</h2>]);
       expect(result.props.children).toHaveLength(2);
+    });
+
+  });
+
+  describe('parseSidebar', () => {
+
+    it('When parsing page return click on a blog message', async () => {
+      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.page });
+      const { getByText } = render(<>{result}</>);
+      const textElement = getByText('Please click on a blog, to see recommendations');
+      expect(textElement).toBeInTheDocument();
+    });
+
+    it('When given blog meta with no tags, return no related blogs message', async () => {
+      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.post });
+      const { getByText } = render(<>{result}</>);
+      const textElement = getByText('No related blogs found, please check back later');
+      expect(textElement).toBeInTheDocument();
+    });
+
+
+    it('When given blogs meta with tags matching other blogs, return them ', async () => {
+      setupFetchMock([{...emptyPost, tags: [19], title: {rendered: "test-2"}, slug: "/test-2"}]);
+      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.post, tags: [19] });
+      const { getByText } = render(<>{result}</>);
+      const textElement = getByText('- test-2');
+      expect(textElement).toBeInTheDocument();
     });
 
   });

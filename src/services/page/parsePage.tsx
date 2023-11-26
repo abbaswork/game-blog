@@ -200,9 +200,11 @@ export default class PageService {
         }
     }
 
+
     /**
-     * Leverages WP API to find related blogs and parse into React Component
+     * Function that returns sidebar based on related blog logic
      * @param meta 
+     * @returns 
      */
     parseSidebar = async (meta: Meta) => {
         //use existing tags to find similiar blogs that can be showcased in related blogs
@@ -211,14 +213,15 @@ export default class PageService {
         //check if blog page, in which case return list of blogs that 
         if (meta.type === PageTypes.post) {
 
+            //default to no blogs found
+            content = <p>No related blogs found, please check back later</p>;
+
             //get list of blogs that also contain the same tag and filter out content
             var relatedBlogs = await this.API.getBlogs({ tags: meta.tags, filter: "content", exclude: [meta.id] });
 
-            if (!relatedBlogs)
-                content = <p>No related blogs found, please check back later</p>
-
-            else
-                content = relatedBlogs.map((blog) => { return (<a href={blog.slug}>{"> " + blog.title.rendered}</a>) });
+            //if blogs were found, map them in links
+            if (relatedBlogs)
+                content = relatedBlogs.map((blog) => { return (<a href={blog.slug}>{"- " + blog.title.rendered}</a>) });
         }
 
         //if not a blog page, return default text
