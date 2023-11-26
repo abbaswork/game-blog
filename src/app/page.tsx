@@ -6,7 +6,7 @@ import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
-  const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/pages?slug=${slug}&per_page=1`,
+  const pageFetch: Page[] = await fetch(`http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/pages?slug=${slug}&per_page=1`,
     {
       headers: wpPreviewHeaders,
     }

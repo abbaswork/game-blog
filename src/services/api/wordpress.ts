@@ -21,7 +21,7 @@ export default class WordpressApi {
         try {// catch any errors while querying rest api
             const next = options || undefined;
             const res = await fetch(
-                `${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/${url}`,
+                `http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/${url}`,
                 {
                     headers: wpPreviewHeaders,
                     next
@@ -31,7 +31,10 @@ export default class WordpressApi {
             //convert to json and check for valid resp
             const json = await res.json();
             if (!Array.isArray(json)) {
-                console.log("Server Error: ", res);
+                console.log("Server Error: ", [{
+                    url: url,
+                    json: json
+                }]);
                 return null;
             } else {
                 return json;
