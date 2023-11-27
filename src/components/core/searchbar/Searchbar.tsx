@@ -8,7 +8,6 @@ import { transformTitleUrl } from '@/services/utils';
 
 const fetcher = (url: string) => fetch(url).then((res) => {
   const json = res.json();
-  console.log("json: ", json);
   return json;
 })
 
