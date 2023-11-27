@@ -23,7 +23,7 @@ type Sitemap = Array<{
 export async function generateUrls(type: "pages" | "posts") {
 
   // Call an external API endpoint to get posts
-  const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/${type}`, {
+  const pageFetch: Page[] = await fetch(`http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/${type}`, {
     headers: wpPreviewHeaders
   }).then((res) => res.json());
 

@@ -20,8 +20,32 @@
   background-color: #441664;
   color: #e3e3e3;
 
-  &:hover, &:focus, &:target, &:active, &:focus-visible {
+  &:hover,
+  &:focus,
+  &:target,
+  &:active,
+  &:focus-visible {
     border: none;
     outline: none;
+  }
+
+}
+
+.searchbar-dropdown {
+  display: none;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: absolute;
+  margin-top: 1.7rem;
+  background-color: #441664;
+  color: white;
+  padding: 1rem;
+  margin-left: -6px;
+  width: 224px;
+  text-overflow: ellipsis;
+  z-index: 1;
+
+  &.content-visible {
+    display: flex;
   }
 }

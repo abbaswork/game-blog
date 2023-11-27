@@ -217,11 +217,13 @@ export default class PageService {
             content = <p>No related blogs found, please check back later</p>;
 
             //get list of blogs that also contain the same tag and filter out content
-            var relatedBlogs = await this.API.getBlogs({ tags: meta.tags, filter: "content", exclude: [meta.id] });
+            if (meta.tags && meta.tags.length > 0) {
+                var relatedBlogs = await this.API.getBlogs({ tags: meta.tags, filter: "content", exclude: [meta.id] });
 
-            //if blogs were found, map them in links
-            if (relatedBlogs)
-                content = relatedBlogs.map((blog, index) => { return (<a key={index} href={blog.slug}>{"- " + blog.title.rendered}</a>) });
+                //if blogs were found, map them in links
+                if (relatedBlogs)
+                    content = relatedBlogs.map((blog, index) => { return (<a key={index} href={blog.slug}>{"- " + blog.title.rendered}</a>) });
+            }
         }
 
         //if not a blog page, return default text
@@ -231,7 +233,7 @@ export default class PageService {
 
         //render content through sidbar
         return (
-            <ListContainer title='Sidebar' className='sidebar'>
+            <ListContainer title='Related Blogs' className='sidebar'>
                 {content}
             </ListContainer>
         );

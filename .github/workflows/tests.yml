@@ -10,7 +10,6 @@ jobs:
     - name: create env file
       run: |
         touch .env
-        echo WP_PROTOCOL=http >> .env
-        echo WP_DOMAIN=${{ env.WP_DOMAIN }} >> .env
+        echo NEXT_PUBLIC_WP_DOMAIN=${{ env.NEXT_PUBLIC_WP_DOMAIN }} >> .env
     - name: Run tests
       run: npm run tests

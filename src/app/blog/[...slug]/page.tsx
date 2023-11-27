@@ -13,7 +13,7 @@ import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 export async function generateStaticParams() {
 
   // Call an external API endpoint to get posts
-  const postsFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts`, {
+  const postsFetch: Page[] = await fetch(`http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/posts`, {
     headers: wpPreviewHeaders
   }).then((res) => res.json());
 
@@ -33,7 +33,7 @@ async function getPost(slug: string[]): Promise<PageService> {
   const draftPage = isEnabled && slug[0] === 'draft';
 
   //create url parts, search params change based on url type
-  const baseURL = `${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2`;
+  const baseURL = `http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2`;
   var searchURL = draftPage ? `/posts/${slug[1]}` : `/posts/?slug=${slug[0]}&per_page=1`;
 
   const postsFetch: Page[] = await fetch(`${baseURL}${searchURL}`, {
