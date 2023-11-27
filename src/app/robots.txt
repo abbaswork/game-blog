@@ -1,3 +1,5 @@
 User-Agent: *
 Allow: /
-Disallow: /draft/
+Disallow: /blog/draft/
+
+Sitemap: https://metricgamer.com/sitemap.xml

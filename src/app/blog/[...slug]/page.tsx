@@ -3,6 +3,7 @@ import { CategoryForPageType, Page } from "@/types";
 import { wpPreviewHeaders } from '@/config/api';
 import { draftMode } from 'next/headers';
 import PageService from '@/services/page/parsePage';
+import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 
 
 /**
@@ -42,7 +43,7 @@ async function getPost(slug: string[]): Promise<PageService> {
   var post: Page = postsFetch[0] ? postsFetch[0] : postsFetch as any;
 
   //catch error
-  if(!post || !post.content){
+  if (!post || !post.content) {
     console.log(`WP Fetch Error for ${searchURL}: `, postsFetch);
     throw Error(`Page could not be retrieved from WP, check terminal for more info`);
   }
@@ -77,16 +78,25 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
 
   const { slug } = params;
   const post = await getPost(slug);
+  const sidebar = await post.parseSidebar(post.meta);
 
-  //return parsed page content
+  //return parsed page conten, sidebars are rendered here because they are unique for each blog
   return (
-    <article className="blog-page">
-      {post.featuredImage}
-      <h1 className="wp-title">{post.meta.title}</h1>
-      <p>Published: {post.meta.date}</p>
-      {post.tableOfContents}
-      {post.content}
-    </article>
+    <>
+      <div className='page-content'>
+        <article className="blog-page">
+          {post.featuredImage}
+          <h1 className="wp-title">{post.meta.title}</h1>
+          <p>Published: {post.meta.date}</p>
+          {post.tableOfContents}
+          {post.content}
+        </article>
+      </div>
+
+      <SidePanel>
+        {sidebar}
+      </SidePanel>
+    </>
   )
 }
 
