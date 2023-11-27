@@ -233,7 +233,7 @@ export default class PageService {
 
         //render content through sidbar
         return (
-            <ListContainer title='Sidebar' className='sidebar'>
+            <ListContainer title='Related Blogs' className='sidebar'>
                 {content}
             </ListContainer>
         );
