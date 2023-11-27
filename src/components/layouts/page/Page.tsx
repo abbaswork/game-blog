@@ -6,6 +6,7 @@ import { ListContainer } from './../../core/list-container/ListContainer';
 import { HeroImage } from './../../core/hero-image/HeroImage';
 import { Heading } from './../../typography/heading/Heading';
 import { SubHeading } from './../../typography/sub-heading/SubHeading';
+import { ScrollUpButton } from './../../core/scroll-up-button/ScrollUpButton';
 
 export const Page: React.FC = () => {
 
@@ -41,6 +42,7 @@ export const Page: React.FC = () => {
             </>
           </ListContainer>
         </SidePanel>
+        <ScrollUpButton/>
       </div>
     </>
   );

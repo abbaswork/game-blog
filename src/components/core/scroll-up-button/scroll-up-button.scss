@@ -1,0 +1,22 @@
+.scroll-up-button {
+    background-color: #6d00c3;
+    border-radius: 25px;
+    height: 36px;
+    width: 36px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 30px;
+    margin-right: 42px;
+    cursor: pointer;
+}
+
+.scroll-up-button .vector {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2px;
+    color: #F5DC00;
+    left: 6px;
+    position: absolute;
+    top: 6px;
+}

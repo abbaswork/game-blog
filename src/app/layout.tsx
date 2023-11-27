@@ -3,6 +3,7 @@ import './globals.scss'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import NavigationService from '@/services/navigation/navigation';
+import { ScrollUpButton } from '@/components/core/scroll-up-button/ScrollUpButton';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -37,7 +38,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Layout for page */}
         <div className='page-layout'>
 
+
+          {/* Layout for Scroll Up Button*/}
+          <ScrollUpButton/>
+
+
           {/* Layout for page content */}
+
           {children}
 
         </div>
