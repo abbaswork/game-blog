@@ -7,6 +7,7 @@ import Script from 'next/script'
 import { menuItem, menuLinkProps } from '@/services/navigation/types'
 import { wpPreviewHeaders } from '@/config/api'
 import NavigationService from '@/services/navigation/navigation'
+import { ScrollUpButton } from '@/components/core/scroll-up-button/ScrollUpButton';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -66,10 +67,16 @@ export default async function RootLayout({
         {/* Layout for page */}
         <div className='page-layout'>
 
+
+          {/* Layout for Scroll Up Button*/}
+          <ScrollUpButton/>
+
+
           {/* Layout for page content */}
           <div className='page-content'>
             {children}
           </div>
+
 
           {/* Layout for side panel */}
           <SidePanel>
