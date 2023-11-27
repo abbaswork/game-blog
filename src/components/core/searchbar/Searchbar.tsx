@@ -2,8 +2,8 @@
 import React from 'react';
 import useSWR from 'swr';
 import './searchbar.scss';
-import { searchResults } from '@/services/navigation/types';
-import { transformTitleUrl } from '@/services/utils';
+import { searchResults } from './../../../services/navigation/types';
+import { transformTitleUrl } from './../../../services/utils';
 
 
 const fetcher = (url: string) => fetch(url).then((res) => {
