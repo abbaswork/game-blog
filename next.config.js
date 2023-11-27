@@ -3,8 +3,8 @@ const nextConfig = {
     images: {
         remotePatterns: [
           {
-            protocol: process.env.WP_PROTOCOL,
-            hostname: process.env.WP_DOMAIN, 
+            protocol: "http",
+            hostname: process.env.NEXT_PUBLIC_WP_DOMAIN, 
             port: '',
             pathname: '/wp-content/**',
           },

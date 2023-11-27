@@ -3,6 +3,7 @@ import PageService from '@/services/page/parsePage';
 import { Metadata } from 'next';
 import { wpPreviewHeaders } from '@/config/api';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
+import React from 'react';
 
 /**
  * Generate static paths for blog pages
@@ -11,7 +12,7 @@ import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 export async function generateStaticParams() {
 
   // Call an external API endpoint to get posts
-  const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/pages`, {
+  const pageFetch: Page[] = await fetch(`http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/pages`, {
     headers: wpPreviewHeaders
   }).then((res) => res.json());
 
@@ -24,7 +25,7 @@ export async function generateStaticParams() {
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
-  const pageFetch: Page[] = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/pages?slug=${slug}&per_page=1`,
+  const pageFetch: Page[] = await fetch(`http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/pages?slug=${slug}&per_page=1`,
     {
       headers: wpPreviewHeaders,
     }

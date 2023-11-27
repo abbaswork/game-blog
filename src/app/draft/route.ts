@@ -17,7 +17,7 @@ export async function GET(request: Request) {
  
   // Fetch the headless CMS to check if the provided `slug` exists
   // getPostBySlug would implement the required fetching logic to the headless CMS
-  const post = await fetch(`${process.env.WP_PROTOCOL}://${process.env.WP_DOMAIN}/wp-json/wp/v2/posts/${id}`,
+  const post = await fetch(`http://${process.env.NEXT_PUBLIC_WP_DOMAIN}/wp-json/wp/v2/posts/${id}`,
     {
       headers: wpPreviewHeaders,
     }
