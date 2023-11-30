@@ -36,7 +36,7 @@ export async function generateUrls(type: "pages" | "posts") {
 
 const mapToSitemap = (urls: { slug: string, modifed: string }[], type: "pages" | "posts") => {
   return urls.map(url => ({
-    url: `https://www.metricgamer.com/${type === "posts" ? "posts/" : ""}${url.slug}`,
+    url: `https://www.metricgamer.com/${type === "posts" ? "blog/" : ""}${url.slug}`,
     lastModified: new Date(url.modifed),
     changeFrequency: type === "posts" ? "monthly" : "weekly",
     priority: 0.8,
