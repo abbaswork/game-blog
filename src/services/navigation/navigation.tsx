@@ -1,6 +1,6 @@
 import WordpressApi from '@/services/api/wordpress';
 import { transformTitleUrl } from '../utils';
-import { NavSearchType, blogItem, menuItem, menuLinkProps, searchResults, tagItem } from './types';
+import { menuLinkProps, searchResults } from './types';
 
 /**
  * This service handles navigation operations so that it can be used within any component
@@ -43,12 +43,6 @@ export default class NavigationService {
      * @returns 
      */
     searchBlogs = (search: string): Promise<searchResults[]> | null => {
-
-        //must have at least 3 letters typed out
-        if (search.length < 2)
-            return null;
-
         return this.API.searchPosts(search);
-
     }
 }
