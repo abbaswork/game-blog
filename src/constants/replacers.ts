@@ -31,6 +31,6 @@ export type TitleWithRatingProps = {
 //Interface for return for Replace Components
 export type ReplaceProps = {
     valid: boolean,
-    compProps?: undefined | BlogCardProps | ImgProps | TitleWithRatingProps | GameTagProps[] | RatingListProps[],
+    compProps?: undefined | string | BlogCardProps | ImgProps | TitleWithRatingProps | GameTagProps[] | RatingListProps[],
     id?: string
 };

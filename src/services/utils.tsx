@@ -12,24 +12,30 @@ export const isElement = (domNode: DOMNode): domNode is Element => {
     return isTag && hasClass;
 };
 
+type ReactPropTypes = {
+    src?: string,
+    alt?: string
+}
 
 /**
  * Simple util that extracts img properties from a node
  * @param domNode 
  * @returns 
  */
-export const getImgAttribs = (domNode: DOMNode): ReplaceProps => {
+export const getImgAttribs = (domNode: DOMNode | ReactPropTypes): ReplaceProps => {
 
     //check if img attribs are present
-    if (!(domNode as Element).attribs.src)
-        return { valid: false };
+    if ((domNode as PropType).src || (domNode as Element).attribs?.src) {
 
-    return {
-        valid: true,
-        compProps: {
-            src: (domNode as Element).attribs.src,
-            alt: (domNode as Element).attribs.alt || "",
+        return {
+            valid: true,
+            compProps: {
+                src: (domNode as PropType).src || (domNode as Element).attribs?.src || "",
+                alt: (domNode as PropType).alt || (domNode as Element).attribs?.alt || "",
+            }
         }
+    } else {
+        return { valid: false };
     }
 }
 
