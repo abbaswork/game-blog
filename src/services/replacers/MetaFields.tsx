@@ -14,7 +14,6 @@ export const replaceMeta = (text: string, token: string): ReplaceProps => {
     text = (text as string).toLowerCase();
 
     const field = text.split(`/${token}:`);
-    console.log("field: ", field[1]);
 
     return { valid: true, compProps: field[1] || "" };
 

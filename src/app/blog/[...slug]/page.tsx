@@ -83,8 +83,6 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
   const post = await getPost(slug);
   const sidebar = await post.parseSidebar(post.meta);
 
-  console.log("post properties: ", post.properties);
-
   //return parsed page conten, sidebars are rendered here because they are unique for each blog
   return (
     <>
