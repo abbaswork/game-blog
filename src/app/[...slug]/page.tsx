@@ -42,11 +42,14 @@ async function getPage(slug: string): Promise<PageService> {
   return pageRender;
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+
+  const page = await getPage(params.slug);
   const title = params.slug[0].replaceAll("-", " ");
+
   return {
-    title: title,
-    description: `Check out the our list of ${title}`,
+    title:  page.properties.metaTitle || title,
+    description: page.properties.metaDescription || `Check out the our list of ${title}`,
     alternates: {
       canonical: `/${params.slug}`
     }

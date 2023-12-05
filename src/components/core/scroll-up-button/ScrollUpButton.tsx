@@ -7,7 +7,6 @@ import "./scroll-up-button.scss";
 export const ScrollUpButton = () => {
 
   const handleScrollToTop = () => {
-    console.log("pressed button");
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
