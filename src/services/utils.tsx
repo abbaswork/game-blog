@@ -25,13 +25,13 @@ type ReactPropTypes = {
 export const getImgAttribs = (domNode: DOMNode | ReactPropTypes): ReplaceProps => {
 
     //check if img attribs are present
-    if ((domNode as PropType).src || (domNode as Element).attribs?.src) {
+    if ((domNode as ReactPropTypes).src || (domNode as Element).attribs?.src) {
 
         return {
             valid: true,
             compProps: {
-                src: (domNode as PropType).src || (domNode as Element).attribs?.src || "",
-                alt: (domNode as PropType).alt || (domNode as Element).attribs?.alt || "",
+                src: (domNode as ReactPropTypes).src || (domNode as Element).attribs?.src || "",
+                alt: (domNode as ReactPropTypes).alt || (domNode as Element).attribs?.alt || "",
             }
         }
     } else {
