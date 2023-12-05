@@ -1,4 +1,4 @@
-import { Page, Meta, ParsedContent, CategoryForPageType } from '@/types';
+import { Page, Meta, ParsedContent, CategoryForPageType, PageProperties } from '@/types';
 import parse, { DOMNode } from 'html-react-parser';
 import { getImgAttribs, isElement } from '../utils';
 import { HeroImage } from '@/components/core/hero-image/HeroImage';
@@ -17,6 +17,7 @@ import { medalArray, icon as iconTypes } from '@/components/core/icons/types';
 import { RatingIcons } from '@/components/core/rating-icons/RatingIcons';
 import WordpressApi from '../api/wordpress';
 import React from 'react';
+import { replaceMeta } from '../replacers/MetaFields';
 
 export enum tableOfContentIcons {
     BOOKMARKS = "bookmarks",
@@ -55,10 +56,14 @@ export default class PageService {
     post: Page;
     content: ParsedContent;
     meta: Meta;
-    featuredImage: ParsedContent | undefined;
     tableOfContents: React.JSX.Element;
-    sidebar: any;
+    sidebar: React.JSX.Element | undefined;
     categoryPageOptions: categoryOptionsType | undefined;
+
+    //property unique to page type (ie. blog, post)
+    properties: PageProperties;
+
+    //initialise WP Rest API
     API = new WordpressApi();
 
     /**
@@ -69,14 +74,63 @@ export default class PageService {
     constructor(post: Page) {
         this.post = post;
 
+        //filter and parse components, to use in other page properties
+        const filterLines = post.content.rendered.replaceAll('\n', '');
+        const parsedAllContent = parse(filterLines);
+
+        //parse content into components
         const parseContent = this.parseContent(post.content.rendered);
         this.content = parseContent;
 
+        //parse categories for page, useful for generating components based on page category (ie.In-depth blog, blog list)
         const parseCategory = post.categoryForPage ? this.parseCategory(post.categoryForPage) : undefined;
         this.categoryPageOptions = parseCategory;
 
+        //extract meta properties for blog
         this.meta = this.parseMeta(post);
         this.tableOfContents = this.parseTOC(parseContent, parseCategory);
+
+        this.properties = this.parsePageProperties(parsedAllContent as JSX.Element[]);
+
+    }
+
+    /**
+     * Parse properties specific to a given page type
+     * @param post :parsed React Components, that are then extracted into page properties,
+     * these are not parsed into components so they can be set in templates per page type
+     */
+    parsePageProperties = (content: JSX.Element[]): PageProperties => {
+
+        var properties: PageProperties = {};
+
+        if (!content || content.length < 0)
+            return properties;
+
+        //map through content to find properties
+        content.map(item => {
+            const className = item.props.className;
+
+            if (className === WPPropertyTags.FeatureBlogImage) {
+                const { valid, compProps } = getImgAttribs(item.props.children.props);
+                properties.featuredImage = valid ? <HeroImage priority={true} {...compProps as ImgProps} /> : undefined;
+            }
+
+            if (className === WPPropertyTags.MetaTitle) {
+                const { valid, compProps } = replaceMeta(item.props.children, "meta-title");
+
+                if (valid && compProps)
+                    properties.metaTitle = compProps as string;
+            }
+
+            if (className === WPPropertyTags.MetaDescription) {
+                const { valid, compProps } = replaceMeta(item.props.children, "meta-description");
+
+                if (valid && compProps)
+                    properties.metaDescription = compProps as string;
+            }
+        });
+
+        return properties;
     }
 
     parseCategory(categoryForPage: CategoryForPageType): categoryOptionsType {
@@ -96,8 +150,11 @@ export default class PageService {
         };
     }
 
+
+
     /**
-     * Function that takes content object from worpdress blog and parses into array of react components
+     * Function that takes content object from wordpress blog and parses into array of react components
+     * replaces specific components based on logic in component mapper
      * @param content 
      * @returns 
      */
@@ -134,13 +191,16 @@ export default class PageService {
 
             //Current implementation parses component based on classname as id
             let className = domNode.attribs.class;
+            let flagProperty = false;
 
-            //Set Page Properties by checking page property tags
-            if (className === WPPropertyTags.FeatureBlogImage) {
-                const { valid, compProps } = getImgAttribs(domNode.children[0]);
-                this.featuredImage = valid ? <HeroImage priority={true} {...compProps as ImgProps} /> : undefined;
-                return <></>;
-            }
+            //filter out page properties instead of rendering
+            Object.values(WPPropertyTags).forEach(tag => {
+                if (className.includes(tag))
+                    flagProperty = true;
+            });
+
+            if (flagProperty)
+                return <></>
 
             //set Page Components by checking the WP Tags
             if (className.includes(WPTags.PostCard)) {

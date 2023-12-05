@@ -46,6 +46,13 @@ export interface Meta {
   categories?: number[],
 }
 
+//unique properties per page type, correlates to WPPropertyTags
+export interface PageProperties {
+  featuredImage?: ParsedContent | undefined;
+  metaTitle?: string;
+  metaDescription?: string;
+}
+
 export type ReplaceOptions = {
   tags: WPTags[],
   htmlContent: boolean
