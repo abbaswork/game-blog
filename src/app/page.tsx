@@ -24,8 +24,8 @@ async function getPage(slug: string): Promise<PageService> {
 }
 
 export const metadata: Metadata = {
-  title: "Metric Gamer: curated list of ranked games for PS2 and more",
-  description: "Checkout our list of best games for modern and older consoles",
+  title: "Metric Gamer: curated list of games ranked on metrics for PS5, Switch, PC and more",
+  description: "Top 5's, Hidden Gems, In-depth reviews, game news and more for PS5, PS4, Switch, PC, Steam Deck and more",
   alternates: {
     canonical: "/"
   }
