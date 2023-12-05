@@ -61,11 +61,14 @@ async function getPost(slug: string[]): Promise<PageService> {
   return postRender;
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  
+  const post = await getPost([params.slug]);
   const title = params.slug[0].replaceAll("-", " ");
+
   return {
-    title: title,
-    description: `Check out the ranked list of ${title}`,
+    title:  post.properties.metaTitle || title,
+    description: post.properties.metaDescription || `Check out the ranked list of ${title}`,
     alternates: {
       canonical: `/blog/${params.slug}`
     }
@@ -80,12 +83,14 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
   const post = await getPost(slug);
   const sidebar = await post.parseSidebar(post.meta);
 
+  console.log("post properties: ", post.properties);
+
   //return parsed page conten, sidebars are rendered here because they are unique for each blog
   return (
     <>
       <div className='page-content'>
         <article className="blog-page">
-          {post.featuredImage}
+          {post.properties.featuredImage}
           <h1 className="wp-title">{post.meta.title}</h1>
           <p>Published: {post.meta.date}</p>
           {post.tableOfContents}
