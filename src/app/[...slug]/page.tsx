@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import { wpPreviewHeaders } from '@/config/api';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 import React from 'react';
+import { draftMode } from 'next/headers';
 
 /**
  * Generate static paths for blog pages
@@ -44,6 +45,10 @@ async function getPage(slug: string): Promise<PageService> {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
 
+  const { isEnabled } = draftMode();
+  if (isEnabled)
+    return {};
+  
   const page = await getPage(params.slug);
   const title = params.slug[0].replaceAll("-", " ");
 

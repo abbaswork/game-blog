@@ -62,12 +62,17 @@ async function getPost(slug: string[]): Promise<PageService> {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  
+
+  //if draft mode is enabled, then do not set any meta data, retrieving and dynamically setting causes reload in which the draft token is lost
+  const { isEnabled } = draftMode();
+  if (isEnabled)
+    return {};
+
   const post = await getPost([params.slug]);
   const title = params.slug[0].replaceAll("-", " ");
 
   return {
-    title:  post.properties.metaTitle || title,
+    title: post.properties.metaTitle || title,
     description: post.properties.metaDescription || `Check out the ranked list of ${title}`,
     alternates: {
       canonical: `/blog/${params.slug}`
