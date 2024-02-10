@@ -4,6 +4,8 @@ import { wpPreviewHeaders } from '@/config/api';
 import { draftMode } from 'next/headers';
 import PageService from '@/services/page/parsePage';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
+import ShareButton from '@/components/core/share-button/ShareButton';
+import { shareButtons } from '@/components/core/share-button/types';
 
 
 /**
@@ -96,6 +98,12 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
           {post.properties.featuredImage}
           <h1 className="wp-title">{post.meta.title}</h1>
           <p>Published: {post.meta.date}</p>
+          <p className="share-section">Share:
+            <ShareButton type={shareButtons.facebook} title={post.meta.title} url={post.meta.url} />
+            <ShareButton type={shareButtons.pinterest} title={post.meta.title} url={post.meta.url} />
+            <ShareButton type={shareButtons.twitter} title={post.meta.title} url={post.meta.url} />
+            <ShareButton type={shareButtons.link} title={post.meta.title} url={post.meta.url} />
+          </p>
           {post.tableOfContents}
           {post.content}
         </article>
