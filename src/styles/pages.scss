@@ -43,6 +43,10 @@
     //add padding between items
     :not(:last-child) {
         margin-bottom: .75rem;
+
+        .share-button{
+            margin-bottom: 0rem;
+        }
     }
 
     //adjust for lists that appear inside page
@@ -120,5 +124,14 @@
 
     .rating-item:not(:last-child) {
         margin-bottom: .3rem;
+    }
+}
+
+.blog-page {
+    .share-section {
+        display: flex;
+        align-items: center;
+        justify-content: baseline;
+        gap: .5rem;
     }
 }

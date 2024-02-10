@@ -42,6 +42,7 @@ export interface Meta {
   title: string,
   date: string,
   type: PageTypes,
+  url: string,
   tags?: number[],
   categories?: number[],
 }

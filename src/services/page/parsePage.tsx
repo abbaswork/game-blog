@@ -146,7 +146,8 @@ export default class PageService {
             date: post.date ? new Date(post.date).toDateString() : "",
             tags: post.tags,
             type: post.type,
-            categories: post.categories
+            categories: post.categories,
+            url: "https://www.metricgamer.com" + (post.type === PageTypes.post ? "/blog/" : '/') + post.slug
         };
     }
 
