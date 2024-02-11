@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import "./share-button.scss";
-import { shareButtons } from './types';
-import { shareIcons } from './icons';
+import { social } from './../../../types/social';
+import { socialIcons } from './../../../assets/social';
 
 type ShareButtonProps = {
   url: string,
   title: string,
-  type: shareButtons
+  type: social
 }
 
 const ShareButton = ({ url, title, type }: ShareButtonProps) => {
@@ -15,11 +15,11 @@ const ShareButton = ({ url, title, type }: ShareButtonProps) => {
   //generate share url based on social media type
   const handleShareURL = () => {
     switch (type) {
-      case shareButtons.facebook:
+      case social.facebook:
         return `https://www.facebook.com/sharer.php?u=${url}&quote=${title}`;
-      case shareButtons.twitter:
+      case social.twitter:
         return `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
-      case shareButtons.pinterest:
+      case social.pinterest:
         return `https://pinterest.com/pin/create/button/?url=${url}&description=${title}`;
       default: "";
     }
@@ -27,7 +27,7 @@ const ShareButton = ({ url, title, type }: ShareButtonProps) => {
 
   //generate post in new window
   const handleShareClick = async () => {
-    if (type === shareButtons.link)
+    if (type === social.link)
       await navigator.clipboard.writeText(url)
 
     else {
@@ -43,7 +43,7 @@ const ShareButton = ({ url, title, type }: ShareButtonProps) => {
       className="share-button"
       onClick={handleShareClick}
     >
-      {shareIcons[type]}
+      {socialIcons[type]}
     </button>
   );
 };

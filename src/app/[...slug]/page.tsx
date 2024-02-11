@@ -5,6 +5,7 @@ import { wpPreviewHeaders } from '@/config/api';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 import React from 'react';
 import { draftMode } from 'next/headers';
+import { Contact } from '@/components/layouts/contact/Contact';
 
 /**
  * Generate static paths for blog pages
@@ -77,6 +78,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
       <SidePanel>
         {sidebar}
+        <Contact />
       </SidePanel>
     </>
   )
