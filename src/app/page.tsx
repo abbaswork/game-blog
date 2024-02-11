@@ -3,6 +3,7 @@ import PageService from '@/services/page/parsePage';
 import { Metadata } from 'next';
 import { wpPreviewHeaders } from '@/config/api';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
+import { Contact } from '@/components/layouts/contact/Contact';
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
@@ -47,6 +48,7 @@ export default async function Home() {
 
       <SidePanel>
         {sidebar}
+        <Contact />
       </SidePanel>
     </>
   )
