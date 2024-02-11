@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import ShareButton from './ShareButton';
-import { shareButtons } from './types';
+import { social } from './../../../types/social';
 
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
@@ -17,6 +17,6 @@ export const Default: Story = {
   args: {
     url: "http://metricgamer.com/",
     title: "Test Share",
-    type: shareButtons.facebook
+    type: social.facebook
   },
 };
