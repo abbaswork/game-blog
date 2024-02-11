@@ -1,0 +1,23 @@
+@import "./../../../styles/util.scss";
+
+.contact {
+  background-color: var(--primary-dark);
+
+  p, a {
+    font-weight: 500;
+    color: white;
+  }
+
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-row {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  // justify-content: center;
+}
