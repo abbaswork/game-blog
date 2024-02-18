@@ -1,4 +1,4 @@
-import WordpressApi from '@/services/api/wordpress';
+import WordpressApi, { menuLocations } from '@/services/api/wordpress';
 import { transformTitleUrl } from '../utils';
 import { menuLinkProps, searchResults } from './types';
 
@@ -16,10 +16,18 @@ export default class NavigationService {
      * @param menuItems 
      * @returns 
      */
-    getMenuItems = async (): Promise<menuLinkProps[]> => {
+    getMenuItems = async (location = menuLocations.header): Promise<menuLinkProps[]> => {
 
-        //get menu items
-        const menuItems = await this.API.getMenu();
+        //get list of menu locations
+        const list = await this.API.getMenuLocations();
+
+        //if no locations defined, return []
+        if (!list)
+            return [];
+
+        //match menu and get items
+        const locationOfMenu = list[location];
+        const menuItems = await this.API.getMenu(locationOfMenu.menu || 0);
 
         //check if valid
         if (!menuItems || menuItems.length < 1)
@@ -29,7 +37,12 @@ export default class NavigationService {
         const parsedMenuItems: menuLinkProps[] = menuItems.map(item => {
             return {
                 text: item.title.rendered,
-                href: transformTitleUrl(item.title.rendered, "/")
+                href: (item.url ?
+                    //if the url is defined, check if its a draft url, if so parse the title and not the url
+                    (item.url.includes("draft") ? transformTitleUrl(item.title.rendered, "/") : item.url || "")
+                    //uf there is no url, then parse the title
+                    : transformTitleUrl(item.title.rendered, "/")
+                )
             }
         });
 

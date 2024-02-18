@@ -4,6 +4,8 @@ import { Metadata } from 'next';
 import { wpPreviewHeaders } from '@/config/api';
 import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 import { Contact } from '@/components/layouts/contact/Contact';
+import NavigationService from '@/services/navigation/navigation';
+import { menuLocations } from '@/services/api/wordpress';
 
 //get blog data fetch
 async function getPage(slug: string): Promise<PageService> {
@@ -34,8 +36,10 @@ export const metadata: Metadata = {
 
 export default async function Home() {
 
+  const navigationService = new NavigationService();
   const page = await getPage('home-page');
   const sidebar = await page.parseSidebar(page.meta);
+  const sidebarContact = await navigationService.getMenuItems(menuLocations.sidebar);
 
   return (
     <>
@@ -48,7 +52,7 @@ export default async function Home() {
 
       <SidePanel>
         {sidebar}
-        <Contact />
+        <Contact links={sidebarContact} />
       </SidePanel>
     </>
   )

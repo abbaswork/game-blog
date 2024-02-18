@@ -1,14 +1,24 @@
-import { menuItem } from "@/services/navigation/types";
 import { Page } from "@/types";
-
 import { Element } from 'html-react-parser';
 import { PageTypes } from ".";
 
 export const setupFetchMock = (mockData: any) => {
-    global.fetch = jest.fn().mockImplementation(() =>
-        Promise.resolve({
-            json: () => Promise.resolve(mockData),
+    global.fetch = jest.fn().mockImplementation((url) => {
+
+        let setupData: any;
+
+        //match mock data based on url
+        if (url.includes("menu-locations"))
+            setupData = mockData["menu-locations"];
+
+
+        if (url.includes("menu-items"))
+            setupData = mockData["menu-items"];
+
+        return Promise.resolve({
+            json: () => Promise.resolve(setupData || mockData),
         })
+    }
     );
 };
 

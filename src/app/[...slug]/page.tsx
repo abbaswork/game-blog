@@ -6,6 +6,8 @@ import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 import React from 'react';
 import { draftMode } from 'next/headers';
 import { Contact } from '@/components/layouts/contact/Contact';
+import NavigationService from '@/services/navigation/navigation';
+import { menuLocations } from '@/services/api/wordpress';
 
 /**
  * Generate static paths for blog pages
@@ -66,6 +68,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const page = await getPage(params.slug);
   const sidebar = await page.parseSidebar(page.meta);
+  const navigationService = new NavigationService();
+  const sidebarContact = await navigationService.getMenuItems(menuLocations.sidebar);
 
   return (
     <>
@@ -78,7 +82,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
       <SidePanel>
         {sidebar}
-        <Contact />
+        <Contact links={sidebarContact}/>
       </SidePanel>
     </>
   )

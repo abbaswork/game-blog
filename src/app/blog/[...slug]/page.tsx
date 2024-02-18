@@ -7,6 +7,8 @@ import { SidePanel } from '@/components/layouts/side-panel/SidePanel';
 import ShareButton from '@/components/core/share-button/ShareButton';
 import { social } from '@/types/social';
 import { Contact } from '@/components/layouts/contact/Contact';
+import NavigationService from '@/services/navigation/navigation';
+import { menuLocations } from '@/services/api/wordpress';
 
 
 /**
@@ -90,6 +92,8 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
   const { slug } = params;
   const post = await getPost(slug);
   const sidebar = await post.parseSidebar(post.meta);
+  const navigationService = new NavigationService();
+  const sidebarContact = await navigationService.getMenuItems(menuLocations.sidebar);
 
   //return parsed page conten, sidebars are rendered here because they are unique for each blog
   return (
@@ -113,7 +117,7 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
 
       <SidePanel>
         {sidebar}
-        <Contact/>
+        <Contact links={sidebarContact}/>
       </SidePanel>
     </>
   )
