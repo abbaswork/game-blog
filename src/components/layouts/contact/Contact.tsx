@@ -26,8 +26,8 @@ export const Contact = ({ links }: Props) => {
           type={social.tiktok} />
       </div>
       <div className='links'>
-        {links.map(link =>
-          <a href={link.href}>{link.text}</a>
+        {links.map((link, index) =>
+          <a key={index} href={link.href}>{link.text}</a>
         )}
       </div>
     </div>
