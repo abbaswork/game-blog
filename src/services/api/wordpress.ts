@@ -1,11 +1,25 @@
 import { Page } from "@/types";
 import { menuItem, searchResults } from "../navigation/types";
 
+//setup menu types
+type menuLocationMap = {
+    [key in menuLocations]: {
+        menu: number,
+        name: menuLocations
+    }
+};
+
+//setup menu locations
+enum menuLocations {
+    header = "header",
+    sidebar = "sidebar"
+}
+
 //setup WP headers
 const wpPreviewHeaders = new Headers();
 wpPreviewHeaders.set('Authorization', 'Basic ' + btoa(process.env.WP_USERNAME + ":" + process.env.WP_PASSWORD));
 
-export { wpPreviewHeaders };
+export { wpPreviewHeaders, menuLocations };
 
 /**
  * This API configures fetch to make authenticated calls to WP
@@ -30,13 +44,14 @@ export default class WordpressApi {
 
             //convert to json and check for valid resp
             const json = await res.json();
-            if (!Array.isArray(json)) {
+            if (json?.code) {
                 console.log("Server Error: ", [{
                     url: url,
                     json: json
                 }]);
                 return null;
             } else {
+                // return (Array.isArray(json) ? json : [json]);
                 return json;
             }
 
@@ -46,11 +61,19 @@ export default class WordpressApi {
     }
 
     /**
+     * Returns collection of menu items
+     * @returns 
+     */
+    getMenuLocations = (): Promise<menuLocationMap> => {
+        return this.query(`menu-locations`)
+    }
+
+    /**
      * get list of menu items
      * @returns 
      */
-    getMenu = (): Promise<menuItem[]> => {
-        return this.query(`menu-items`)
+    getMenu = (id: number): Promise<menuItem[]> => {
+        return this.query(`menu-items?menus=${id}`)
     }
 
     /**
@@ -66,7 +89,7 @@ export default class WordpressApi {
      * @param param0 
      * @returns 
      */
-    getBlogs = ({ tags, categories, search, pages, filter, exclude}: { tags?: number[], categories?: number[], search?: string, pages?: number, filter?: string, exclude?: number[] }): Promise<Page[]> => {
+    getBlogs = ({ tags, categories, search, pages, filter, exclude }: { tags?: number[], categories?: number[], search?: string, pages?: number, filter?: string, exclude?: number[] }): Promise<Page[]> => {
         return this.query(`posts/`
             + (pages ? `?per_page=${pages}` : "?per_page=100")
             + (tags ? `&tags=${tags}` : "")
