@@ -4,7 +4,7 @@ import ContactButton from './../../../components/core/contact-button/ContactButt
 import { social } from "./../../../types/social";
 
 interface Props {
-  links: {
+  links?: {
     href: string,
     text: string
   }[]
@@ -26,7 +26,7 @@ export const Contact = ({ links }: Props) => {
           type={social.tiktok} />
       </div>
       <div className='links'>
-        {links.map((link, index) =>
+        {links && links.map((link, index) =>
           <a key={index} href={link.href}>{link.text}</a>
         )}
       </div>
