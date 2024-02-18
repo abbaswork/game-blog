@@ -71,14 +71,14 @@ describe('PageService', () => {
   describe('parseSidebar', () => {
 
     it('When parsing page return click on a blog message', async () => {
-      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.page });
+      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.page, url: ""  });
       const { getByText } = render(<>{result}</>);
       const textElement = getByText('Please click on a blog, to see recommendations');
       expect(textElement).toBeInTheDocument();
     });
 
     it('When given blog meta with no tags, return no related blogs message', async () => {
-      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.post });
+      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.post, url: "" });
       const { getByText } = render(<>{result}</>);
       const textElement = getByText('No related blogs found, please check back later');
       expect(textElement).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe('PageService', () => {
 
     it('When given blogs meta with tags matching other blogs, return them ', async () => {
       setupFetchMock([{...emptyPost, tags: [19], title: {rendered: "test-2"}, slug: "/test-2"}]);
-      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.post, tags: [19] });
+      const result = await pageService.parseSidebar({ id: 0, slug: "/", title: "test", date: "/", type: PageTypes.post, tags: [19], url: ""  });
       const { getByText } = render(<>{result}</>);
       const textElement = getByText('- test-2');
       expect(textElement).toBeInTheDocument();

@@ -37,7 +37,12 @@ export default class NavigationService {
         const parsedMenuItems: menuLinkProps[] = menuItems.map(item => {
             return {
                 text: item.title.rendered,
-                href: (item.url && item.url.includes("draft") ? transformTitleUrl(item.title.rendered, "/") : item.url || "")
+                href: (item.url ?
+                    //if the url is defined, check if its a draft url, if so parse the title and not the url
+                    (item.url.includes("draft") ? transformTitleUrl(item.title.rendered, "/") : item.url || "")
+                    //uf there is no url, then parse the title
+                    : transformTitleUrl(item.title.rendered, "/")
+                )
             }
         });
 

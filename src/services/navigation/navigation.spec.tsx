@@ -14,13 +14,17 @@ describe('NavigationService', () => {
     describe('getMenuItems', () => {
 
         it('When 0 menu items are fetched, return an empty array', async () => {
-            setupFetchMock([]);
+            setupFetchMock(undefined);
             const test = await navigationService.getMenuItems();
             expect(test).toHaveLength(0);
         });
 
         it('When multiple menu items are fetched, parse the menu items correctly', async () => {
-            setupFetchMock([{id: 0, title: {rendered: "test-1"}}, {id: 1, title: {rendered: "test-2"}}]);
+            setupFetchMock({
+                "menu-locations": { "header": { "menu": 0 } },
+                "menu-items": [{ id: 0, title: { rendered: "test-1" } }, { id: 1, title: { rendered: "test-2" } }],
+            }
+            );
             const test = await navigationService.getMenuItems();
             expect(test).toStrictEqual([{ text: 'test-1', href: '/test-1' }, { text: 'test-2', href: '/test-2' }]);
         });
