@@ -3,13 +3,18 @@ import './contact.scss';
 import ContactButton from './../../../components/core/contact-button/ContactButton';
 import { social } from "./../../../types/social";
 
-interface Props { }
+interface Props {
+  links: {
+    href: string,
+    text: string
+  }[]
+}
 
-export const Contact = ({ }: Props) => {
+export const Contact = ({ links }: Props) => {
   return (
     <div className='contact'>
       <p>Find us here:</p>
-      <div className='icon-row'>
+      <div className='links'>
         <ContactButton
           url={'https://www.youtube.com/channel/UCc5oH20jdMfxXKBBcc_OAcA'}
           type={social.youtube} />
@@ -20,7 +25,11 @@ export const Contact = ({ }: Props) => {
           url={'https://www.tiktok.com/@metric.gamer.official'}
           type={social.tiktok} />
       </div>
-      <a href='https://docs.google.com/forms/d/e/1FAIpQLSdJDfikXnTCbU2XkvhYk7EBeikD1Ws-hBLFFOWBf8GleNoq5w/viewform?usp=sf_link'>Get in touch</a>
+      <div className='links'>
+        {links.map(link =>
+          <a href={link.href}>{link.text}</a>
+        )}
+      </div>
     </div>
   );
 };

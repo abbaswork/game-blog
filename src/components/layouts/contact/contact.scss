@@ -11,13 +11,13 @@
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
-}
 
-.icon-row {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  // justify-content: center;
+  .links{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    // justify-content: center;
+  }
 }
