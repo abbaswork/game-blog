@@ -36,7 +36,7 @@ export const BlogCard = ({ src, alt, title, href, description, postCard = true }
   return (
     <div className='blog-card'>
       <Link href={href}>
-        <Image
+        {/* <Image
           // properties set to adjust to container for dynamic image
           src={src}
           alt={alt}
@@ -45,7 +45,21 @@ export const BlogCard = ({ src, alt, title, href, description, postCard = true }
           sizes="100vw"
           style={{ width: '100%', height: 'auto' }} // optional
           priority={true}
-        />
+          placeholder='blur'
+          blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM0FQyoBwACMAEXcLbIuAAAAABJRU5ErkJggg=='
+        /> */}
+        <Image
+          // other properties (src, alt, priority, etc.)
+          width={1}
+          height={1}
+          layout="responsive"
+          placeholder="blur"
+          sizes="100vw"
+          blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM0FQyoBwACMAEXcLbIuAAAAABJRU5ErkJggg=='
+          src={src}
+          alt={alt}
+          priority={true}
+          />
         <div className='card-bottom'>
           <h3>{title}</h3>
           {blogDescription()}
